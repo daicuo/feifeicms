@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>播放来源管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+<script>
+$(document).ready(function(){
+	$feifeicms.show.table();
+});
+</script>
+</head>
+<body class="body">
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<form action="?s=Admin-Player-Insert" method="post" name="playerform" id="playerform">
+<thead>
+<tr class="ct">
+  <th class="l" width="100">播放器排序</th>
+  <th class="l" width="100">版权跳转时间</th>
+  <th class="l" width="120">播放器名称</th>
+  <th class="l" width="120">播放器标识</th>
+	<th class="l" width="250">独立解析地址</th>
+  <th class="l">播放器简介</th>
+  <th class="r" width="80">相关操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="l ct"><input name="player_order" type="text" value="{$max_order+1}" size="3" maxlength="5" class="w50"></td>
+<td class="l ct"><input name="player_copyright" type="text" value="0" size="3" class="w50 text-center"></td>
+<td class="l ct"><input name="player_name_zh" type="text" value="" maxlength="80" class="w100 text-center"></td>
+<td class="l ct"><input name="player_name_en" type="text" value="" maxlength="50" class="w100 text-center"></td>
+<td class="l ct"><input name="player_jiexi" type="text" value="" maxlength="120" class="w250 text-center"></td>
+<td class="l ct"><input name="player_info" type="text" value="" maxlength="250" style="width:95%;padding-left:3px"></td>
+<td class="r ct"><input type="submit" class="submit" value="添加"></td>
+</tr>
+</tbody>
+</form>       
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<form action="?s=Admin-Player-Updateall" method="post" name="myform" id="myform">
+<thead>
+<tr class="ct">
+  <th class="l" width="100">播放器排序</th>
+  <th class="l" width="100">版权跳转时间</th>
+  <th class="l" width="120">播放器名称</th>
+  <th class="l" width="120">播放器标识</th>
+  <th class="l" width="250">独立解析地址</th>
+  <th class="l" >播放器简介</th>
+  <th class="r" width="80">相关操作</th>
+</tr>
+</thead>
+<tbody>
+<volist name="list_player" id="feifei"><input name="ids[{$feifei.player_id}]" type="hidden" value="{$feifei.player_id}">
+<tr>
+<td class="l ct"><input name="player_order[{$feifei.player_id}]" type="text" value="{$feifei.player_order}" size="5" class="w50"></td>
+<td class="l ct"><input name="player_copyright[{$feifei.player_id}]" type="text" value="{$feifei.player_copyright}" size="5" class="w50"></td>
+<td class="l ct"><input name="player_name_zh[{$feifei.player_id}]" type="text" value="{$feifei.player_name_zh}" maxlength="80" class="w100 text-center"></td>
+<td class="l ct"><input name="player_name_en[{$feifei.player_id}]" type="text" value="{$feifei.player_name_en}" maxlength="50" class="w100 text-center"></td>
+<td class="l ct"><input name="player_jiexi[{$feifei.player_id}]" type="text" value="{$feifei.player_jiexi}" maxlength="120" class="w250 text-center"></td>
+<td class="l ct"><input name="player_info[{$feifei.player_id}]" type="text" value="{$feifei.player_info}" maxlength="250" style="width:95%;padding-left:3px"></td>
+<td class="r ct"><a href="?s=Admin-Player-Hide-id-{$feifei.player_id}-status-{$feifei['player_status']+1}" title="隐藏后前台将不会显示"><eq name="feifei.player_status" value="1">隐藏<else/><font color="red">显示</font></eq></a> <a href="?s=Admin-Player-Del-id-{$feifei.player_id}" onClick="return confirm('确定删除该播放来源吗?')" title="点击删除播放器吗？">删除</a></td>
+</tr>
+</volist> 
+</tbody>
+<tfoot>
+<tr>
+  <td colspan="7" class="r"><input type="button" class="submit" value="批量修改" onClick="post('?s=Admin-Player-Updateall');"></td>
+</tr>  
+</tfoot>
+</form>       
+</table>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

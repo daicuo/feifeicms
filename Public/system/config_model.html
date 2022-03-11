@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>内容模块配置</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+</head>
+<body class="body">
+<div class="title">
+	<div class="left">视频、文章初始值配置</div>
+</div>
+<div class="add">  
+	<form action="?s=Admin-Config-Update-type-model" method="post" name="myform" id="myform">
+  <ul><li class="left">视频片头广告时长：</li>
+    <li class="right"><input  type="text" name="config[play_second]" value="{$play_second}" class="w120 ct" maxlength="2" title="设为0则不启用">&nbsp; </li>
+  </ul>		             
+  <ul><li class="left">默认文章扩展分类：</li>
+    <li class="right"><input type="text" name="config[news_type]" id="news_type" value="{$news_type}" maxlength="250" class="w400">&nbsp;</li>
+  </ul>
+  <ul><li class="left">默认专题扩展分类：</li>
+    <li class="right"><input type="text" name="config[special_type]" id="special_type" value="{$special_type}" maxlength="250" class="w400">&nbsp;</li>
+  </ul>
+  <ul><li class="left">默认明星扩展分类：</li>
+    <li class="right"><input type="text" name="config[star_type]" id="star_type" value="{$star_type}" maxlength="250" class="w400">&nbsp;</li>
+  </ul>
+  <ul><li class="left">默认角色扩展分类：</li>
+    <li class="right"><input type="text" name="config[role_type]" id="role_type" value="{$role_type}" maxlength="250" class="w400">&nbsp;</li>
+  </ul>	
+  <ul><li class="left">默认视频扩展分类：</li>
+    <li class="right"><input type="text" name="config[play_type]" id="play_type" value="{$play_type}" maxlength="250" class="w400">&nbsp;</li>    
+  </ul>       
+  <ul><li class="left">默认视频地区列表：</li>
+    <li class="right"><input type="text" name="config[play_area]" id="play_area" value="{$play_area}" maxlength="250" class="w400">&nbsp;</li>    
+  </ul>
+  <ul><li class="left">默认视频年代列表：</li>
+    <li class="right"><input type="text" name="config[play_year]" id="play_year" value="{$play_year}" maxlength="250" class="w400">&nbsp;</li>    
+  </ul>
+  <ul><li class="left">默认视频对白列表：</li>
+    <li class="right"><input type="text" name="config[play_language]" id="play_language" value="{$play_language}" maxlength="250" class="w400">&nbsp;</li>    
+  </ul>
+  <ul><li class="left">默认视频资源列表：</li>
+    <li class="right"><input type="text" name="config[play_state]" id="play_state" value="{$play_state}" maxlength="250" class="w400">&nbsp;</li>    
+  </ul>	
+  <ul><li class="left">默认视频版本列表：</li>
+    <li class="right"><input type="text" name="config[play_version]" id="play_version" value="{$play_version}" maxlength="250" class="w400">&nbsp;</li>    
+  </ul>
+  <ul><li class="left">默认视频周期列表：</li>
+    <li class="right"><input type="text" name="config[play_weekday]" id="play_weekday" value="{$play_weekday|default='一,二,三,四,五,六,日'}" maxlength="250" class="w400">&nbsp;</li>
+  </ul>
+  <ul><li class="left">节目缓冲广告地址：</li>
+    <li class="right"><input type="text" name="config[play_buffer]" id="play_buffer" value="{$play_buffer}" maxlength="150" class="w400"></li>
+  </ul>
+	<ul><li class="left">节目暂停广告地址：</li>
+    <li class="right"><input type="text" name="config[play_pause]" id="play_pause" value="{$play_pause}" maxlength="150" class="w400"></li>
+  </ul>
+	<ul><li class="left">电视直播平台地址：</li>
+    <li class="right"><input type="text" name="config[play_live]" id="play_live" value="{$play_live}" maxlength="150" class="w400"></li>
+  </ul>	
+  <ul><li class="left">视频解析服务地址：</li>
+    <li class="right"><input type="text" name="config[play_jiexi]" id="play_jiexi" value="{$play_jiexi}" maxlength="250" class="w400">&nbsp;<label>留空则使用官方站外分享代码播放（无版权风险）播放器变量：{name}</label></li>
+  </ul>
+  <ul><li class="left">下载服务器组前缀：<br /><font color="red">前缀名称$$$对应地址</font><br />(一行一个)</li>
+    <li class="right" style="height:150px"><textarea name="config[play_server]" id="play_server" style="height:133px"><volist name="play_server" id="feifei">{$key}$$${$feifei}<php>echo(chr(13));</php></volist></textarea></li>
+  </ul>
+  <ul class="footer">
+    <input type="submit" name="submit" value="提交"> <input type="reset" name="reset" value="重置">
+  </ul>
+  </form>
+</div>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

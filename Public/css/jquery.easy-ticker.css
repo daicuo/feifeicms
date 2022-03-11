@@ -1,0 +1,32 @@
+/*模态框*/
+.backdrop {
+  position: fixed;
+  left: 0; top: 0;
+  background-color: rgba(0,0,0,.8);
+  width: 100%; height: 100%;
+  z-index: 1;
+}
+.modal {
+  position: fixed;
+  left: 50%; top: 50%; margin-top: -190px;
+  margin-left: -300px;
+  z-index: 2;
+}
+.modal .inner {
+  background-color: #fff;
+  width: 600px; height: 380px;
+}
+.modal .head {
+  height: 60px; line-height: 60px;
+  background-color: #198cc2; padding: 0 30px;
+  position: relative;
+}
+.modal .head .ff_dialog_title {
+  font-size: 24px; color: #fff; font-weight: 400;
+}
+.modal .head .ff_dialog_close {
+  display: block; position: absolute;
+  right: 15px; top: 50%; margin-top: -11px;
+  background-image: url('../images/admin/close.png');
+  width: 22px; height: 22px; cursor: pointer;
+}

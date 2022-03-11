@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>第三方支付接入参数</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+<script>
+$(document).ready(function(){
+	$("#tabs>a").click(function(){
+		var no = $(this).attr('id');
+		var n = $("#tabs>a").length;
+		showtab('tabs',no,n);
+		$("#tabs>a").removeClass("on");
+		$(this).addClass("on");
+		return false;
+	});
+});
+</script>
+</head>
+<body class="body">
+<div class="title">
+	<div class="tabs" id="tabs">
+  <a href="javascript:void(0)" class="on" onfocus="this.blur();" id="1">基本设置</a>
+	<a href="javascript:void(0)" onfocus="this.blur();" id="2">充值卡密</a>
+  <a href="javascript:void(0)" onfocus="this.blur();" id="3">支付宝</a>
+  <a href="javascript:void(0)" onfocus="this.blur();" id="4">微信支付</a>
+  <a href="javascript:void(0)" onfocus="this.blur();" id="5">PayPal</a>
+  <a href="javascript:void(0)" onfocus="this.blur();" id="6">瑞捷支付</a>
+	<a href="javascript:void(0)" onfocus="this.blur();" id="7">码支付</a>
+ 	</div>
+</div>
+<div class="add">
+  <form action="?s=Admin-Config-Update-type-pay" method="post" name="myform" id="myform">
+	<div id="tabs1">
+    <ul><li class="left">用户充值最低金额：</li>
+      <li class="right"><input type="text" class="w120" name="config[user_pay_small]" maxlength="8" value="{$user_pay_small}">
+      <label>用户每次最低充值金额</label>
+      </li>
+    </ul>    
+    <ul><li class="left">用户充值影币比例：</li>
+      <li class="right"><input type="text" class="w120" name="config[user_pay_scale]" maxlength="8" value="{$user_pay_scale}">
+      <label>1元人民币等于多少影币</label></li>
+    </ul>
+    <ul><li class="left">VIP会员售价：</li>
+      <li class="right"><input type="text" class="w120" name="config[user_pay_vip_ext]" maxlength="8" value="{$user_pay_vip_ext}">
+      <label>（影币/天），按（天）销售</label></li>
+    </ul>
+    <ul><li class="left">VIP购买最少天数：</li>
+      <li class="right"><input type="text" class="w120" name="config[user_pay_vip_small]" maxlength="8" value="{$user_pay_vip_small}">
+      <label>用户升级时自动计算所需影币。</label></li>
+    </ul>
+    <ul><li class="left">付费点播方案说明：</li>
+      <li class="right text-left">支持两种付费点播运营模式（VIP会员包天包月模式、单片点播扣费模式）<br />相关链接：<a href="//cdn.feifeicms.co/server/v3/jump.php?id=4&version={%feifeicms_version}" target="_blank" style="color:red">商家申请及设置教程</a> <a href="?s=Admin-Orders-Show" style="color:green">充值订单管理</a></li>
+    </ul>
+  </div>
+  <div id="tabs2" style="display:none">
+    <ul><li class="left">卡密寄售网址链接：</li>
+      <li class="right"><input type="text" class="w400" name="config[pay_card_sell]" maxlength="255" value="{$pay_card_sell}">
+      <label>第三方24小时自动寄售网址</label>
+      </li>
+    </ul>
+  </div>
+  <div id="tabs3" style="display:none">
+    <ul><li class="left">支付宝收款账号：</li>
+      <li class="right"><input type="text" class="w300" name="config[pay_alipay_account]" value="{$pay_alipay_account}"></li>
+    </ul>
+    <ul><li class="left">合作者身份 (PID):</li>
+      <li class="right"><input type="text" class="w300" name="config[pay_alipay_appid]" value="{$pay_alipay_appid}"></li>
+    </ul>
+    <ul><li class="left">交易安全校验码 (key):</li>
+      <li class="right"><input type="text" class="w300" name="config[pay_alipay_appkey]" value="{$pay_alipay_appkey}"></li>
+    </ul>
+  </div>
+  <div id="tabs4" style="display:none">
+    <ul><li class="left">公众号ID：</li>
+      <li class="right"><input type="text" class="w300" name="config[pay_wxpay_account]" value="{$pay_wxpay_account}"></li>
+    </ul>
+    <ul><li class="left">商户号:</li>
+      <li class="right"><input type="text" class="w300" name="config[pay_wxpay_appid]" value="{$pay_wxpay_appid}"></li>
+    </ul>
+    <ul><li class="left">商户密钥:</li>
+      <li class="right"><input type="text" class="w300" name="config[pay_wxpay_appkey]" value="{$pay_wxpay_appkey}"></li>
+    </ul>
+  </div>
+  <div id="tabs5" style="display:none">
+    <ul><li class="left">PayPal收款账号：</li>
+      <li class="right"><input type="text" class="w300" name="config[pay_paypal_account]" value="{$pay_paypal_account}"></li>
+    </ul>
+  </div>
+  <div id="tabs6" style="display:none">
+    <ul><li class="left">支付商家编号：</li>
+      <li class="right"><input type="text" class="w300" name="config[pay_rj_appid]" value="{$pay_rj_appid}"></li>
+    </ul>
+    <ul><li class="left">支付商家密钥：</li>
+      <li class="right"><input type="text" class="w300" name="config[pay_rj_appkey]" value="{$pay_rj_appkey}"></li>
+    </ul>
+  </div>
+	<div id="tabs7" style="display:none">
+    <ul><li class="left">支付商家编号：</li>
+      <li class="right"><input type="text" class="w300" name="config[pay_code_appid]" value="{$pay_code_appid}"></li>
+    </ul>
+    <ul><li class="left">支付商家密钥：</li>
+      <li class="right"><input type="text" class="w300" name="config[pay_code_appkey]" value="{$pay_code_appkey}"></li>
+    </ul>
+		<ul>
+			<li class="left">商家收款平台：</li>
+      <li class="right">
+			<input type="text" class="w300" name="config[pay_code_type]" value="{$pay_code_type}">
+			<label>1：支付宝；2：QQ钱包；3：微信（多个用逗号分隔）</label>
+			</li>
+    </ul>
+		<ul>
+			<li class="left">收款通知类型：</li>
+      <li class="right">
+			<input type="text" class="w300" name="config[pay_code_act]" value="{$pay_code_act|default=0}">
+			<label>0表示及时到账 1则为商家代收款</label>
+			</li>
+    </ul>
+  </div>
+  <!-- -->
+  <ul class="footer">
+    <input type="submit" name="submit" value="提交"> <input type="reset" name="reset" value="重置">
+  </ul>
+  </form>
+</div>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>分类管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	changeid("{$list_sid}");
+	$('#list_sid').change(function(){
+		changeid($(this).val());
+	});
+	$("#myform").submit(function(){
+		if($feifeicms.form.empty('myform','list_name') == false){
+			return false;
+		}
+		if($feifeicms.form.empty('myform','list_skin') == false){
+			return false;
+		}				
+	});
+});
+function changeid($sid){
+	if($sid == 1){
+		$(".list-vod").show();
+	}else if($sid > 1){
+		$(".list-vod").hide();
+	}
+	if($sid == 8){
+		$(".list-area").show();
+		$(".list-star").show();
+	}
+};
+</script>
+</head>
+<body class="body">
+<include file="./Public/system/header.html" />
+<form action="?s=Admin-List-Update" method="post" name="myform" id="myform">
+<gt name="list_id" value="0">
+<input type="hidden" name="list_id" id="list_id" value="{$list_id}">
+</gt>
+<div class="title">
+	<div class="left">{$tpltitle}分类分类</div>
+    <div class="right"><a href="?s=Admin-List-Show">返回分类管理</a></div>
+</div>
+<div class="add">
+<ul><li class="left">所属系统：</li>
+  <li class="right"><select name="list_sid" id="list_sid" class="w120">
+	<option value="1" <eq name="list_sid" value="1">selected</eq>>视频系统 | vod</option>
+	<option value="2" <eq name="list_sid" value="2">selected</eq>>文章系统 | news</option>
+	<option value="3" <eq name="list_sid" value="3">selected</eq>>专题系统 | special</option>	
+	<option value="7" <eq name="list_sid" value="7">selected</eq>>剧情系统 | scenario</option>
+	<option value="8" <eq name="list_sid" value="8">selected</eq>>明星系统 | star</option>
+	<option value="9" <eq name="list_sid" value="9">selected</eq>>角色系统 | role</option>
+	<option value="4" <eq name="list_sid" value="4">selected</eq>>标签系统 | tag</option>
+	<option value="5" <eq name="list_sid" value="5">selected</eq>>留言系统 | guestbook</option>	
+	<option value="6" <eq name="list_sid" value="6">selected</eq>>评论系统 | forum</option>
+	<option value="29" <eq name="list_sid" value="29">selected</eq>>地图系统 | map</option>
+	<option value="30" <eq name="list_sid" value="30">selected</eq>>搜索系统 | search</option>
+	<option value="13" <eq name="list_sid" value="13">selected</eq>>分类单页 | list</option>
+	</select></li>
+</ul>
+<ul><li class="left">上级分类：</li>
+  <li class="right"><select name="list_pid" id="list_pid" class="w120"><option value="0">无</option><volist name=":ff_mysql_list('order:list_pid asc,list_oid;sort:asc')" id="feifei"><option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$list_pid">selected</eq>>{$feifei.list_name}</option></volist></select> * 不选择将成为一级分类</li>
+</ul>
+<ul class="list-vod"><li class="left">影片观看权限：</li>
+  <li class="right"><select name="list_ispay" id="list_ispay" class="w120">                            
+    <option value='0'>免费点播</option>
+    <option value='1' <eq name="list_ispay" value="1">selected</eq>>VIP点播</option>
+    </select></li>
+</ul>
+<ul class="list-vod"><li class="left">影片单独付费：</li>
+  <li class="right"><input type="text" name="list_price" id="list_price" value="{$list_price}" maxlength="6" class="w120">
+    <label>单位：（影币）</label></li>
+</ul>
+<ul class="list-vod"><li class="left">影片试看时间：</li>
+  <li class="right"><input type="text" name="list_trysee" id="list_trysee" value="{$list_trysee}" maxlength="3" class="w120">
+    <label>单位：（分钟）</label></li>
+</ul>
+<ul class="list-vod"><li class="left">版权跳转时间：</li>
+  <li class="right"><input type="text" name="list_copyright" id="list_copyright" value="{$list_copyright}" maxlength="3" class="w120">
+    <label>单位：（秒）</label></li>
+</ul>
+<ul><li class="left">分类排序：</li>
+  <li class="right"><input type="text" name="list_oid" id="list_oid" value="{$list_oid}" maxlength="3" class="w120"><label>越小越前面</label></li>
+</ul>
+<ul><li class="left">分类中文名称：</li>
+  <li class="right"><input type="text" name="list_name" id="list_name" value="{$list_name}" maxlength="20" error="* 分类名称不能为空!" class="w120"><span id="list_name_error">*</span></li>
+</ul>
+<ul><li class="left">分类英文别名：</li>
+   <li class="right"><input type="text" name="list_dir" id="list_dir" value="{$list_dir}" maxlength="40" class="w120"><label>留空则自动转为拼音</label></li>
+</ul>
+<ul><li class="left">分类页模板名：</li>
+   <li class="right">
+	 <input type="text" name="list_skin" id="list_skin" value="{$list_skin|default='list'}" maxlength="40" error="* 使用模板名不能为空!" class="w120">
+	 <label>常用模板名：<a href="javascript:" onClick="list_skin.value='channel';">channel</a>
+	 <a href="javascript:" onClick="list_skin.value='list';">list</a>
+	 <a href="javascript:" onClick="list_skin.value='list_sp';">list_sp</a>
+	 <a href="javascript:" onClick="list_skin.value='top';">top</a>
+	 <a href="javascript:" onClick="list_skin.value='map';">map</a></label><span id="list_skin_error"></span></li>
+</ul>
+<ul><li class="left">详情页模板名：</li>
+   <li class="right"><input type="text" name="list_skin_detail" id="list_skin_detail" value="{$list_skin_detail|default='detail'}" maxlength="40" class="w120"></li>
+</ul>
+<ul class="list-vod"><li class="left">播放页模板名：</li>
+   <li class="right"><input type="text" name="list_skin_play" id="list_skin_play" value="{$list_skin_play|default='play'}" maxlength="40" class="w120"></li>
+</ul>
+<ul><li class="left">筛选页模板名：</li>
+   <li class="right"><input type="text" name="list_skin_type" id="list_skin_type" value="{$list_skin_type|default='type'}" maxlength="40" class="w120"></li>
+</ul>
+<ul><li class="left">分类SEO标题：</li>
+   <li class="right"><input type="text" name="list_title" id="list_title" value="{$list_title}" maxlength="80" class="w400">&nbsp;</li>
+</ul>
+<ul><li class="left">分类SEO关键词：</li>
+   <li class="right"><input type="text" name="list_keywords" id="list_keywords" value="{$list_keywords}" maxlength="150" class="w400">&nbsp;</li>
+</ul>
+<ul><li class="left">分类SEO描述：</li>
+   <li class="right"><textarea name="list_description" id="list_description">{$list_description}</textarea></li>
+</ul>
+<ul><li class="left">分类扩展配置.多分类：</li>
+   <li class="right"><input type="text" name="list_extend[type]" id="list_extend_type" value="{$list_extend.type}" class="w400">&nbsp;</li>
+</ul>
+<ul class="list-vod list-area"><li class="left">分类扩展配置.地区：</li>
+   <li class="right"><input type="text" name="list_extend[area]" id="list_extend_area" value="{$list_extend.area}" class="w400">&nbsp;</li>
+</ul>
+<ul class="list-vod"><li class="left">分类扩展配置.年代：</li>
+   <li class="right"><input type="text" name="list_extend[year]" id="list_extend_year" value="{$list_extend.year}" class="w400">&nbsp;</li>
+</ul>
+<ul class="list-vod list-star"><li class="left">分类扩展配置.明星：</li>
+   <li class="right"><input type="text" name="list_extend[star]" id="list_extend_star" value="{$list_extend.star}" class="w400">&nbsp;</li>
+</ul>
+<ul class="list-vod"><li class="left">分类扩展配置.资源：</li>
+   <li class="right"><input type="text" name="list_extend[state]" id="list_extend_state" value="{$list_extend.state}" class="w400">&nbsp;</li>
+</ul>
+<ul class="list-vod"><li class="left">分类扩展配置.语言：</li>
+   <li class="right"><input type="text" name="list_extend[language]" id="list_extend_language" value="{$list_extend.language}" class="w400">&nbsp;</li>
+</ul>
+<ul class="list-vod"><li class="left">分类扩展配置.版本：</li>
+   <li class="right"><input type="text" name="list_extend[version]" id="list_extend_version" value="{$list_extend.version}" class="w400">&nbsp;</li>
+</ul>
+<ul class="list-vod"><li class="left">分类扩展配置.周期：</li>
+   <li class="right"><input type="text" name="list_extend[weekday]" id="list_extend_weekday" value="{$list_extend.weekday}" class="w400">&nbsp;</li>
+</ul>
+<ul class="footer">
+<input type="submit" name="submit" value="提交"> <input type="reset" name="reset" value="重置"> <gt name="admin_id" value="0">注：不修改密码请留空</gt>
+</ul>
+</div>
+</form>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

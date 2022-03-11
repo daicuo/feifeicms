@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>充值卡密管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+<style>
+#ff_dialog_body{font-size:14px;font-weight:bold;text-align:left;height:350px;line-height:24px;padding-left:20px;overflow-y:auto;}
+</style>
+</head>
+<body class="body">
+<include file="./Public/system/plus_dialog.html" />
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+	<thead>
+		<tr>
+			<th class="r">
+			卡密管理 （总额：{$count_total} / 已充值：{$count_use|default=0} / 未使用：{$count_unuse|default=0}）</th>
+		</tr>
+	</thead>
+  <tr>
+    <td class="tr pd">
+		<form action="?s=Admin-Card-Create" method="post">
+			数量：<input type="text" name="card_num" maxlength="4" value="50" class="w100 ct">
+			面额：<input type="text" name="card_face" maxlength="5" value="50" class="w100 ct">
+    	<input type="submit" value="生成卡密" class="submit">
+			<input type="button" value="批量复制" class="submit card_copy">
+		</form>
+		</td>
+  </tr>
+  <tr>
+    <td class="tr pd">
+		<form action="?s=Admin-Card-Show" method="post">
+		状态：<select name="status" class="w100 card_status">
+			<option value="">全部</option>
+			<option value="0" <eq name="status" value="0">selected</eq>>未使用</option>
+			<option value="1" <eq name="status" value="1">selected</eq>>已充值</option>
+		</select>
+		面值：<select name="face" class="w100 card_face">
+			<option value="">全部</option>
+			<option value="1" <eq name="face" value="1">selected</eq>>1</option>
+			<option value="5" <eq name="face" value="5">selected</eq>>5</option>
+			<option value="10" <eq name="face" value="10">selected</eq>>10</option>
+			<option value="50" <eq name="face" value="50">selected</eq>>50</option>
+			<option value="100" <eq name="face" value="100">selected</eq>>100</option>
+			<option value="500" <eq name="face" value="500">selected</eq>>500</option>
+			<option value="1000" <eq name="face" value="1000">selected</eq>>1000</option>
+		</select>&nbsp;
+    <input type="text" name="wd" id="wd" class="w200" value="{$wd|urldecode}" placeholder="卡号搜索" onClick="this.select();">
+    <input type="submit" value="搜索" class="submit"></td>
+		</form>
+  </tr>
+</table>
+<form action="?s=Admin-Card-Show" method="post" name="myform" id="myform">
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+  <thead>
+    <tr class="ct">
+      <th class="l">ID 卡密</th>
+      <th class="l" width="80">面额</th>
+      <th class="l" width="120">生成时间</th>
+      <th class="l" width="120">使用时间</th>
+			<th class="l" width="100">操作用户</th>
+			<th class="l" width="80">充值状态</th>
+      <th class="r" width="60">相关操作</th>
+    </tr>
+  </thead>
+  <volist name="list" id="feifei">
+  <tbody>
+  <tr>
+    <td class="l"><input name='ids[]' type='checkbox' value='{$feifei.card_id}' class="noborder" style="float:left;margin-top:0"><span style="color:#666;">{$feifei.card_id}</span> <span class="copy_number">{$feifei.card_number}</span></td>
+    <td class="l ct">{$feifei.card_face}</td>
+    <td class="l ct">{$feifei.card_addtime|date='Y-m-d H:i',###}</td>
+    <td class="l ct"><gt name="feifei.card_usetime" value="0">{$feifei.card_usetime|date='Y-m-d H:i',###}<else/>0</gt></td>
+		<td class="l ct">{$feifei.user_name|default='0'|htmlspecialchars}</td>
+		<td class="l ct"><gt name="feifei.card_status" value="0"><font color='red'>已充值</font><else/>未使用</gt></td>
+    <td class="r ct">
+    <a href="?s=Admin-Card-Del-ids-{$feifei.card_id}" onClick="return confirm('确定删除?')">删除</a>
+    </td>
+  </tr>
+  </tbody>
+  </volist>
+   <tr>
+      <td colspan="9" class="r pages">{$pages}</td>
+    </tr> 
+  <tfoot>
+    <tr>
+      <td colspan="9" class="r">
+      <input type="button" value="全选" class="submit" onClick="checkall('all');">
+      <input type="button" value="反选" class="submit" onClick="checkall();">
+      <input type="button" value="批量删除" class="submit" onClick="if(confirm('删除后将无法还原，确定要清空吗?')){return post('?s=Admin-Card-Del');}else{return false;}">
+			<input type="button" value="批量复制" class="submit card_copy">
+      </td>
+    </tr>  
+  </tfoot>
+</table> 
+</form>
+<include file="./Public/system/footer.html" />
+<script type="text/javascript">
+$feifeicms.show.table();
+//展开复制框
+$('.card_copy').on('click',function(){
+	$html = new Array();
+	$(".copy_number").each(function(){
+			$html.push($(this).html());
+	});
+	$('#ff_dialog_title').html('手动选中需复制的行数，CTRL+C');
+	$('#ff_dialog_body').html($html.join('<br/>'));
+	$("#ff-dialog-back").show();
+	$("#ff-dialog-box").show();
+});
+//状态跳转
+$(".card_status").change(function () {  
+	var val = $(this).children('option:selected').val();
+	self.location.href = '?s=Admin-Card-Show-status-'+val;
+});
+//面值跳转
+$(".card_face").change(function () {  
+	var val = $(this).children('option:selected').val();
+	self.location.href = '?s=Admin-Card-Show-face-'+val;
+});
+</script>
+</body>
+</html>

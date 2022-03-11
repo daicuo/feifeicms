@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>用户管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+</head>
+<body class="body">
+<form action="?s=Admin-Admin-Delall" method="post" name="myform" id="myform"> 
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<thead><tr><th class="r"><span style="float:left">订单搜索</span></th></tr></thead>
+  <tr>
+    <td class="tr">
+    <select name="ispay" class="w100"><option value="99">支付状态</option><option value="0" <eq name="ispay" value="0">selected</eq>>未付款</option><option value="1" <eq name="ispay" value="1">selected</eq>>付款中</option><option value="2" <eq name="ispay" value="2">selected</eq>>已付款</option></select>&nbsp;
+    <input type="text" name="wd" id="wd" class="w300" value="{$wd|urldecode}" placeholder="可搜索(订单编号、订单备注)" onClick="this.select();">
+    <input type="button" value="搜索" class="submit" onClick="post('?s=Admin-Orders-Show');"></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+  <thead>
+    <tr class="ct">
+      <th class="l"><span style="float:left">ID<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'id')))}" data-order="id" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></span>订单编号</th>
+      <th class="l" width="80">用户ID</th>
+      <th class="l" width="50">数量</th>
+      <th class="l" width="80">支付状态</th>
+      <th class="l" width="80">付款方式</th>
+			 <th class="l" width="90">订单金额<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'money')))}" data-order="money" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="l" width="120">下单时间<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'addtime')))}" data-order="addtime" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="l" width="120">付款时间<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'paytime')))}" data-order="paytime" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="r" width="80">相关操作</th>
+    </tr>
+  </thead>
+  <volist name="list" id="feifei">
+  <tbody>
+  <tr>
+    <td class="l pd">
+		<label class="fl ids_check"><input name='ids[]' type='checkbox' value='{$feifei.order_id}' class="noborder"></label>
+		<label class="fl ids_show">{$feifei.order_id}</label>
+		<label class="fl">{$feifei.order_sign}</label>
+		</td>
+    <td class="l ct"><a href="?s=Admin-Orders-Show-uid-{$feifei.order_uid}">{$feifei.user_id}</a></td>
+    <td class="l ct">{$feifei.order_total}</td>
+    <td class="l ct"><switch name="feifei.order_ispay"><case value="1">付款中</case><case value="2"><font color="green">已付款</font></case><default/>未付款</switch></td>
+    <td class="l ct">{$feifei.order_paytype|htmlspecialchars|msubstr=0,10,true}</td>
+		<td class="l ct">{$feifei.order_money}</td>
+    <td class="l ct">{$feifei.order_addtime|date='Y.m.d H:i',###}</td>
+    <td class="l ct">{$feifei.order_paytime|date='Y.m.d H:i',###}</td>
+    <td class="r ct">
+    <a href="?s=Admin-Orders-Pay-sign-{$feifei.order_sign}-money-{$feifei.order_money}" title="人工补单">补单</a>
+    <a href="?s=Admin-Orders-Del-ids-{$feifei.order_id}" onClick="return confirm('确定删除?')">删除</a>
+    </td>
+  </tr>
+  </tbody>
+  </volist>
+   <tr>
+      <td colspan="8" class="r pages">{$pages}</td>
+    </tr> 
+  <tfoot>
+    <tr>
+      <td colspan="8" class="r">
+      <input type="button" value="全选" class="submit" onClick="checkall('all');">
+      <input type="button" value="反选" class="submit" onClick="checkall();">
+      <input type="button" value="删除" class="submit" onClick="if(confirm('删除后将无法还原，确定要清空吗?')){return post('?s=Admin-Orders-Del'));}else{return false;}">
+      </td>
+    </tr>  
+  </tfoot>
+</table>
+</form>
+<include file="./Public/system/footer.html" />
+<script type="text/javascript">
+$feifeicms.show.table();
+$feifeicms.show.sort("{$order}");
+</script>
+</body>
+</html>

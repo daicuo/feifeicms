@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>明星管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+</head>
+<body class="body">
+<include file="./Public/system/plus_createhtml.html" />
+<include file="./Public/system/plus_showpic.html" />
+<include file="./Public/system/plus_bg.html" />
+<table border="0" cellpadding="0" cellspacing="0" class="table select">
+  <thead>
+  <tr>
+    <th colspan="2"><span style="float:left">明星筛选</span>
+    <span class="right"><a href="?s=Admin-Star-Add" style="float:right">添加明星</a></span>
+    </th>
+  </tr>
+  </thead>
+  <tr>
+    <td class="l pd" width="80">明星搜索：</td>
+    <td class="r pd">
+    <form action="?s=Admin-Star-Show" method="post">
+    <input type="text" class="w200 wd" name="wd" maxlength="30" value="{$wd|urldecode}" placeholder="明星、别名" onClick="this.select();">
+    <input type="submit" value="搜索" class="submit">
+    <input type="button" value="展开+" class="submit all" data-id="set">
+    </form>
+    </td>
+  </tr>
+  <tr>
+    <td class="l pd" width="80">分类筛选：</td>
+    <td class="r pd">
+    <lt name="cid" value="1">
+    	<a class="active" href="?{:http_build_query(array_merge($urls,array('cid'=>0)))}">全部</a>
+    <else/>
+   		<a href="?{:http_build_query(array_merge($urls,array('cid'=>0)))}">全部</a>
+    </lt>
+    <php>$item_list = ff_mysql_list('sid:8;limit:0;order:list_pid asc,list_oid;sort:asc');</php>
+    <volist name="item_list" id="feifei">
+      <eq name="feifei.list_id" value="$cid">
+      <a class="active" href="?{:http_build_query(array_merge($urls,array('cid'=>$feifei['list_id'])))}">{$feifei.list_name}</a>
+      <else/>
+      <a href="?{:http_build_query(array_merge($urls,array('cid'=>$feifei['list_id'])))}">{$feifei.list_name}</a>
+      </eq>
+    </volist>
+    <br />
+    <!--二级分类展示 -->
+    <volist name="item_list" id="feifei">
+      <volist name="feifei['list_son']" id="feifeison">
+      <eq name="feifeison.list_id" value="$cid">
+      <a class="active list-{$feifeison.list_id} list-pid-{$feifeison.list_pid}" data-pid="{$feifeison.list_pid}" href="?{:http_build_query(array_merge($urls,array('cid'=>$feifeison['list_id'])))}">├ {$feifeison.list_name}</a>
+      <else/>
+      <a class="list-son list-{$feifeison.list_id} list-pid-{$feifeison.list_pid}" data-pid="{$feifeison.list_pid}" href="?{:http_build_query(array_merge($urls,array('cid'=>$feifeison['list_id'])))}">├ {$feifeison.list_name}</a>
+      </eq>
+      </volist>
+    </volist>
+    </td>
+  </tr>
+  <tr>
+    <td class="l pd" width="80">审核状态：</td>
+    <td class="r pd">
+    <a id="status-" href="?{:http_build_query(array_merge($urls,array('status'=>null)))}">全部</a>
+    <a id="status-1" href="?{:http_build_query(array_merge($urls,array('status'=>1)))}">已审核</a>
+    <a id="status-0" href="?{:http_build_query(array_merge($urls,array('status'=>0)))}">未审核</a>
+    <a id="status--1" href="?{:http_build_query(array_merge($urls,array('status'=>-1)))}">待验证</a>
+    </td>
+  </tr>
+  <tr>
+    <td class="l pd" width="80">权重状态：</td>
+    <td class="r pd">
+    <a id="stars-" href="?{:http_build_query(array_merge($urls,array('stars'=>'')))}">全部</a>
+    <a id="stars-1" href="?{:http_build_query(array_merge($urls,array('stars'=>1)))}">一星</a>
+    <a id="stars-2" href="?{:http_build_query(array_merge($urls,array('stars'=>2)))}">二星</a>
+    <a id="stars-3" href="?{:http_build_query(array_merge($urls,array('stars'=>3)))}">三星</a>
+    <a id="stars-4" href="?{:http_build_query(array_merge($urls,array('stars'=>4)))}">四星</a>
+    <a id="stars-5" href="?{:http_build_query(array_merge($urls,array('stars'=>5)))}">五星</a>
+    </td>
+  </tr>   
+  <tr>
+    <td class="l pd" width="80">排序类型：</td>
+    <td class="r pd">
+    <a id="order-hits" href="?{:http_build_query(array_merge($urls,array('order'=>'hits')))}">按人气</a>
+    <a id="order-gold" href="?{:http_build_query(array_merge($urls,array('order'=>'gold')))}">按评分</a>
+    <a id="order-stars" href="?{:http_build_query(array_merge($urls,array('order'=>'stars')))}">按权重</a>
+    <a id="order-id" href="?{:http_build_query(array_merge($urls,array('order'=>'id')))}">按入库ID</a>
+    <a id="order-addtime" href="?{:http_build_query(array_merge($urls,array('order'=>'addtime')))}">按更新时间</a>
+    </td>
+  </tr>
+  <tr>
+    <td class="l pd" width="80">排序方式：</td>
+    <td class="r pd">
+    <a id="sort-asc" href="?{:http_build_query(array_merge($urls,array('sort'=>'asc')))}">升序</a>
+    <a id="sort-desc" href="?{:http_build_query(array_merge($urls,array('sort'=>'desc')))}">倒序</a>
+    </td>
+  </tr>
+</table>
+<form action="?s=Admin-Star-Show" method="post" name="myform" id="myform">
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+  <thead>
+    <tr class="ct">
+      <th class="l pd"><span style="float:left;">ID <img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'id')))}" data-order="id" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></span> 明星标题</th>
+			<th class="l" width="90">权重<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'stars')))}" data-order="stars" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="l" width="60">人气<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'hits')))}" data-order="hits" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="l" width="60">评分<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'gold')))}" data-order="gold" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="l" width="80">时间<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'addtime')))}" data-order="addtime" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="r" width="130">操作</th>
+    </tr>
+  </thead>
+  <volist name="list" id="feifei">
+  <tbody>
+  <tr>
+    <td class="l pd">
+		<label class="fl ids_check"><input name='ids[]' type='checkbox' value='{$feifei.person_id}' class="noborder"></label>
+    <label class="fl ids_show">{$feifei.person_id}</label>
+		<label class="fl">『<a href="{$feifei.list_url}">{$feifei.list_name}</a>』</label>
+		<label class="fl"><a href="{:ff_url('star/read',array('id'=>$feifei['person_id']))}" target="_blank">{$feifei.person_name|msubstr=0,40}</a></label>
+    </td>
+		<td class="l ct"><img class="navpoint star_no_{$feifei.list_stars}" id="star_{$feifei.person_id}_0" src="__PUBLIC__/images/admin/starno.gif" onClick="setstars('Star',{$feifei.person_id},0);"><volist name="feifei['list_stars']" id="ajaxstar"><img src="__PUBLIC__/images/admin/star{$ajaxstar}.gif" onClick="setstars('Star',{$feifei.person_id},{$i});" id="star_{$feifei.person_id}_{$i}" class="navpoint"></volist></td>
+    <td class="l ct">{$feifei.person_hits}</td>
+    <td class="l ct">{$feifei.person_gold}</td>
+    <td class="l ct">{$feifei.person_addtime|date='Y.m.d',###}</td>
+    <td class="r ct">
+		<a href="?s=Admin-Role-Show-father_id-{$feifei.person_id}">角色</a>
+		<a href="?s=Admin-Star-Add-cid-{$feifei.person_cid}-id-{$feifei.person_id}" title="点击修改影片">编辑</a>
+		<eq name="feifei.person_status" value="1"><a href="?s=Admin-Star-Status-id-{$feifei.person_id}-value-0" title="点击隐藏明星">隐藏</a><else /><a href="?s=Admin-Star-Status-id-{$feifei.person_id}-value-1" title="点击显示明星"><font color="red">显示</font></a></eq>
+		<a href="?s=Admin-Star-Del-id-{$feifei.person_id}" onClick="return confirm('确定删除该明星吗?')" title="点击删除影片">删除</a>
+		</td>
+  </tr>
+  </tbody>
+  </volist>
+    <tr>
+      <td colspan="6" class="r pages">{$pages}</td>
+    </tr>   
+<tfoot>
+	<tr>
+		<td colspan="6" class="r">
+		<input type="button" value="全选" class="submit" onClick="checkall('all');">
+		<input name="" type="button" value="反选" class="submit" onClick="checkall();">
+		<input type="button" value="取消审核" class="submit" onClick="post('?s=Admin-Star-Status-value-0');">
+		<input type="button" value="批量审核" class="submit" onClick="post('?s=Admin-Star-Status-value-1');">
+		<input type="button" value="批量删除" class="submit" onClick="if(confirm('删除后将无法还原,确定要删除吗?')){post('?s=Admin-Star-Delall');}else{return false;}">
+		<input type="button" value="批量移动" class="submit" onClick="$('#psetcid').show();"> <span style="display:none" id="psetcid"><select name="pestcid"><option value="">选择目标分类</option><volist name=":ff_mysql_list('sid:8;limit:0;order:list_pid asc,list_oid;sort:asc')" id="feifei"><option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$cid">selected</eq>>{$feifei.list_name}</option><volist name="feifei['list_son']" id="feifei"><option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$cid">selected</eq>>├ {$feifei.list_name}</option></volist></volist></select> <input type="button" class="submit" value="确定转移" onClick="post('?s=Admin-Star-Pestcid');"/></span></td>
+	</tr>  
+</tfoot>
+</table>
+</form>
+<include file="./Public/system/footer.html" />
+<script type="text/javascript">
+$feifeicms.show.table();
+$feifeicms.show.collapse('star','get');
+$feifeicms.show.sort("{$order}");
+//扩展属性
+$('#status-{$status}').addClass('active');
+$('#stars-{$stars}').addClass('active');
+$('#order-{$order}').addClass('active');
+$('#sort-{$sort}').addClass('active');
+$('.list-pid-{$cid}').show();
+if($('.list-{$cid}').eq(0).attr('data-pid')){
+	$pid = $('.list-{$cid}').eq(0).attr('data-pid');
+	$('.list-pid-'+$pid).show();
+}
+</script>
+</body>
+</html>

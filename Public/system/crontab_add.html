@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>计划任务添加</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script src="__PUBLIC__/js/admin.js"></script>
+<style>
+.checkbox label{ float:left; margin-right:5px;}
+.checkbox label input{float:left;margin:0 2px 0 0;}
+.checkbox label span{float:left}
+#cj_id,#cj_id_tips{display:none} 
+</style>
+</head>
+<body class="body">
+<form action="?s=Admin-Crontab-Update" method="post" name="myform" id="myform">
+<input name="crontab_time" type="hidden" value="{:time()}" />
+<div class="title">
+	<div class="left">计划任务</div>
+  <div class="right"><a href="?s=Admin-Crontab-Index">返回任务管理</a></div>
+	<div class="right"><a href="?s=Admin-Crontab-Add">添加新任务</a></div>
+</div>
+<div class="add">
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs1">
+  <tr>
+    <td class="tl">任务名称：</td>
+    <td class="tr">
+		<input type="text" name="crontab_name" id="crontab_name" value="{$crontab_name}" error="* 名称不能为空" class="w300">
+		<select name="crontab_status" class="w70">
+		<option value="1">启用</option>
+		<option value="0" <eq name="crontab_status" value="0">selected</eq>>禁用</option></select></td>
+  </tr>	
+  <tr>
+    <td class="tl">任务类型：</td>
+    <td class="tr"><select name="crontab_type" style="width:307px" id="crontab_type">
+		<option value="hits">统计人气值</option>
+		<option value="create" <eq name="crontab_type" value="create">selected</eq>>生成静态网页</option>
+		<option value="caiji" <eq name="crontab_type" value="caiji">selected</eq>>定时采集数据</option>
+		</select>
+		<select name="cj_id" id="cj_id">
+		<option value="">请选择资源站</option>
+		<volist name="list_cj" id="feifei">
+		<option value="{$feifei.cj_id},3">{$i}、{$feifei.cj_name}</option>
+		</volist>
+		</select>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">任务参数：</td>
+    <td class="tr">
+		<input type="text" name="crontab_params" id="crontab_params"  maxlength="255" value="{$crontab_params}" class="w300">
+		<label id="cj_id_tips">采集ID、几小时内更新时间限制</label>
+    <label id="create_tips">几小时内更新时间限制（,分类页生成概率'1=100%、2=50%'）</label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">任务描述：</td>
+    <td class="tr">
+		<input type="text" name="crontab_info" id="crontab_info"  maxlength="255" value="{$crontab_info}" class="w300"></td>
+  </tr>		
+  <tr>
+    <td class="tl">周期：</td>
+    <td class="tr checkbox">
+		<label><input name="crontab_week[]" id="week1" type="checkbox" value="1"><span>周一</span></label>
+		<label><input name="crontab_week[]" id="week2" type="checkbox" value="2"><span>周二</span></label>
+		<label><input name="crontab_week[]" id="week3" type="checkbox" value="3"><span>周三</span></label>
+		<label><input name="crontab_week[]" id="week4" type="checkbox" value="4"><span>周四</span></label>
+		<label><input name="crontab_week[]" id="week5" type="checkbox" value="5"><span>周五</span></label>
+		<label><input name="crontab_week[]" id="week6" type="checkbox" value="6"><span>周六</span></label>
+		<label><input name="crontab_week[]" id="week0" type="checkbox" value="0"><span>周日</span></label>
+		</td>
+  </tr> 
+  <tr>
+    <td class="tl">时间：</td>
+    <td class="tr checkbox">
+		<label><input name="crontab_hour[]" id="hour00" type="checkbox" value="00"><span>00</span></label>
+		<label><input name="crontab_hour[]" id="hour01" type="checkbox" value="01"><span>01</span></label>
+		<label><input name="crontab_hour[]" id="hour02" type="checkbox" value="02"><span>02</span></label>
+		<label><input name="crontab_hour[]" id="hour03" type="checkbox" value="03"><span>03</span></label>
+		<label><input name="crontab_hour[]" id="hour04" type="checkbox" value="04"><span>04</span></label>
+		<label><input name="crontab_hour[]" id="hour05" type="checkbox" value="05"><span>05</span></label>
+		<label><input name="crontab_hour[]" id="hour06" type="checkbox" value="06"><span>06</span></label>
+		<label><input name="crontab_hour[]" id="hour07" type="checkbox" value="07"><span>07</span></label>
+		<label><input name="crontab_hour[]" id="hour08" type="checkbox" value="08"><span>08</span></label>
+		<label><input name="crontab_hour[]" id="hour09" type="checkbox" value="09"><span>09</span></label>
+		<label><input name="crontab_hour[]" id="hour10" type="checkbox" value="10"><span>10</span></label>
+		<label><input name="crontab_hour[]" id="hour11" type="checkbox" value="11"><span>11</span></label>
+		<label><input name="crontab_hour[]" id="hour12" type="checkbox" value="12"><span>12</span></label>
+		<label><input name="crontab_hour[]" id="hour13" type="checkbox" value="13"><span>13</span></label>
+		<label><input name="crontab_hour[]" id="hour14" type="checkbox" value="14"><span>14</span></label>
+		<label><input name="crontab_hour[]" id="hour15" type="checkbox" value="15"><span>15</span></label>
+		<label><input name="crontab_hour[]" id="hour16" type="checkbox" value="16"><span>16</span></label>
+		<label><input name="crontab_hour[]" id="hour17" type="checkbox" value="17"><span>17</span></label>
+		<label><input name="crontab_hour[]" id="hour18" type="checkbox" value="18"><span>18</span></label>
+		<label><input name="crontab_hour[]" id="hour19" type="checkbox" value="19"><span>19</span></label>
+		<label><input name="crontab_hour[]" id="hour20" type="checkbox" value="20"><span>20</span></label>
+		<label><input name="crontab_hour[]" id="hour21" type="checkbox" value="21"><span>21</span></label>
+		<label><input name="crontab_hour[]" id="hour22" type="checkbox" value="22"><span>22</span></label>
+		<label><input name="crontab_hour[]" id="hour23" type="checkbox" value="23"><span>23</span></label>
+		</td>
+  </tr>	
+  <tr>
+    <td class="tl">调用方法：</td>
+    <td class="tr"><strong>{$Think.CONFIG.site_domain}/index.php?g=crontab&a={$crontab_name}</strong></td>
+  </tr>	  
+</table>
+<ul class="footer">
+	<input type="submit" name="submit" value="提交">
+	<input type="reset" name="reset" value="重置">
+</ul>
+</div>
+</form>
+<script>
+<volist name="crontab_week" id="feifei">
+$('#week{$feifei}').attr("checked",'true');
+</volist>
+<volist name="crontab_hour" id="feifei">
+$('#hour{$feifei}').attr("checked",'true');
+</volist>
+<eq name="crontab_type" value="caiji">
+$('#cj_id').show();
+$('#cj_id_tips').show();
+$('#create_tips').hide();
+</eq>
+<eq name="crontab_type" value="create">
+$('#cj_id').hide();
+$('#cj_id_tips').hide();
+$('#create_tips').show();
+</eq>
+// 分类change
+$('#crontab_type').on("change", function(){
+	$value = $(this).children('option:selected').val();
+	if($value == 'caiji'){
+		$('#cj_id').show();
+		$('#cj_id_tips').show();
+		$('#create_tips').hide();
+	}else if($value == 'create'){
+		$('#cj_id').hide();
+		$('#cj_id_tips').hide();
+		$('#create_tips').show();
+	}else{
+		$('#cj_id').hide();
+		$('#cj_id_tips').hide();
+	}
+});
+$('#cj_id').on("change", function(){
+	$('#crontab_params').val($(this).children('option:selected').val());
+});
+</script>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

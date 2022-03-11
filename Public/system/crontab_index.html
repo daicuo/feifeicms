@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>计划任务管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<style>
+label{ color:#666}
+label span{ color: #03F}
+.tips{ color:#666}
+.tips strong{ color:red}
+</style>
+</head>
+<body class="body">
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<thead>
+<tr>
+<th colspan="5">
+	计划任务管理
+	<span class="right"><a href="?s=Admin-Crontab-Add" style="float:right; color:red; font-weight:bold">添加任务</a></span>
+</th>
+</thead>
+<tbody>
+<tr>
+	<td class="l pd" width="120">标识</td>
+	<td class="l pd" width="200">描述</td>
+	<td class="l pd" width="160">上次执行时间</td>
+	<td class="l pd" >计划执行时间</td>
+	<td class="r ct" width="150">相关操作</td>
+</tr>
+<volist name="task" id="feifei">
+<tr>
+	<td class="l pd">{$key}</td>
+	<td class="l pd">{$feifei.crontab_info}</td>
+	<td class="l pd">{$feifei.crontab_time|date='Y-m-d H:i:s',###}</td>
+	<td class="l pd">周期：{$feifei.crontab_week}<br />时间：{$feifei.crontab_hour}</td>
+	<td class="r ct">
+	<eq name="feifei.crontab_status" value="1">
+	<a href="?s=Admin-Crontab-Status-name-{$key}-value-0">禁用</a>
+	<else />
+	<a href="?s=Admin-Crontab-Status-name-{$key}-value-1"><font color="red">开启</font></a>
+	</eq>
+	<a href="?g=crontab&a={$key}" target="_blank">运行</a>
+	<a href="?s=Admin-Crontab-Add-name-{$key}">编辑</a>
+	<a href="?s=Admin-Crontab-Del-name-{$key}" onClick="return confirm('确定删除吗?')">删除</a>
+	</td>
+</tr>	
+</volist>
+<tr>
+  <td class="tr tips" colspan="5">
+		<p><strong>提示1：</strong>此功能是将需要定时操作的功能事先预定，但需要依靠其它方式<strong>触发</strong>，通常为（Windows、Linux）的计划任务</p>
+		<p><strong>提示2：</strong>触发网址为你的任务网址+标识，如（{$Think.CONFIG.site_domain}/index.php?g=crontab&a=hits）</p>
+  </td>
+</tr>
+</tbody>
+</table>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

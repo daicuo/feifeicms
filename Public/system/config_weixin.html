@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>微信相关设置</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/admin-style.css"/>
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+<style>
+.table thead{
+	background:none;
+}
+.table thead th {
+	border-top: none;
+	padding:3px 0;
+}
+.table tbody td input {
+	width:90%;
+}
+.table tfoot td.r {
+	padding-top:15px;
+	border:none;
+}
+</style>
+<script>
+$(document).ready(function(){
+	$("#tabs>a").click(function(){
+		var no = $(this).attr('id');
+		var n = $("#tabs>a").length;
+		showtab('tabs',no,n);
+		$("#tabs>a").removeClass("on");
+		$(this).addClass("on");
+		return false;
+	});
+});
+</script>
+</head>
+<body class="body">
+<div class="title">
+	<div class="tabs" id="tabs">
+  <a href="javascript:void(0)" class="on" onfocus="this.blur();" id="1">公众号基本配置</a>
+  <a href="javascript:void(0)" onfocus="this.blur();" id="2">自定义关键词</a>
+ 	</div>
+</div>
+<div class="add">
+<div id="tabs1">
+<form action="?s=Admin-Config-Update-type-weixin" method="post" name="myform" id="myform">
+	<ul><li class="left">公众号结果对接：</li>
+    <li class="right">
+    <input type="radio" class="radio" name="config[wx_check]" value="0" checked="checked"/>关闭
+		<input type="radio" class="radio" name="config[wx_check]" value="1" <eq name="wx_check" value="1">checked="checked"</eq>/>详情页
+		<input type="radio" class="radio" name="config[wx_check]" value="2" <eq name="wx_check" value="2">checked="checked"</eq>/>播放页
+		<a href="//cdn.feifeicms.co/server/v3/jump.php?id=8&version={%feifeicms_version}" target="_blank" style="color:red">查看帮助说明</a>
+    </li>
+  </ul>
+	<ul><li class="left">搜索分类ID限制：</li>
+    <li class="right"><input type="text" class="w120" name="config[wx_cids]" maxlength="64" value="{$wx_cids}">
+    <label>多个分类用半角,分隔，留空则不限制分类</label></li>
+  </ul>
+	<ul><li class="left">搜索结果排序方式：</li>
+    <li class="right"><input type="text" class="w120" name="config[wx_order]" maxlength="64" value="{$wx_order}">
+    <label>id，hits（人气）,gold（评分）,up（点赞）,addtime(时间)</label></li>
+  </ul>
+  <ul><li class="left">公众号令牌(Token)：</li>
+    <li class="right"><input type="text" class="w400" name="config[wx_token]" maxlength="64" value="{$wx_token}">
+    <label>请输入你在微信公众号平台设置的token</label></li>
+  </ul>	
+	<ul><li class="left">被关注回复：</li>
+    <li class="right"><input type="text" class="w400" name="config[wx_follow]" maxlength="256" value="{$wx_follow}">
+    <label>用户关注公众号后自动回复内容。换行请使用&lt;br&gt;</label></li>
+  </ul>
+	<ul><li class="left">无内容回复：</li>
+    <li class="right"><input type="text" class="w400" name="config[wx_none_txt]" maxlength="256" value="{$wx_none_txt}">
+    <label>搜索无结果时的回复信息。</label></li>
+  </ul>
+	<ul><li class="left">无内容链接：</li>
+    <li class="right"><input type="text" class="w400" name="config[wx_none_url]" maxlength="256" value="{$wx_none_url}">
+    <label>搜索无结果时的图文链接信息。</label></li>
+  </ul>
+	<ul><li class="left">微信业务网址域名：</li>
+    <li class="right"><input type="text" class="w400" name="config[wx_domain]" maxlength="256" value="{$wx_domain}">
+    <label>网址结尾不要加 / 符号，如域名被微信屏蔽，修改此处即可。</label></li>
+  </ul>
+	<ul><li class="left">微信视频解析接口：</li>
+    <li class="right"><input type="text" class="w400" name="config[wx_jiexi]" maxlength="256" value="{$wx_jiexi}">
+    <label>当微信用户输入的信息为网页URL时自动增加该解析前缀。</label></li>
+  </ul>	
+  <!-- -->
+  <ul class="footer">
+    <input type="submit" name="submit" value="提交">
+		<input type="reset" name="reset" value="重置">
+  </ul>
+</form>
+</div>
+<!-- -->
+<div id="tabs2" style="display:none">
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<form action="?s=Admin-Config-Update-type-wxkey" method="post">
+<thead>
+<tr class="ct">
+  <th class="l" width="150">关键词</th>
+  <th class="l" width="200">图文消息标题</th>
+  <th class="l" >图文消息描述</th>
+  <th class="l" width="200">图片链接</th>
+  <th class="r" width="200">跳转链接</th>
+</tr>
+</thead>
+<tbody>
+<volist name="wx_item.keyword" id="feifei">
+<tr>
+<td class="l ct"><input name="config[wx_item][keyword][]" type="text" value="{$feifei}"></td>
+<td class="l ct"><input name="config[wx_item][title][]" type="text" value="{$wx_item['title'][$key]}"></td>
+<td class="l ct"><input name="config[wx_item][content][]" type="text" value="{$wx_item['content'][$key]}"></td>
+<td class="l ct"><input name="config[wx_item][pic][]" type="text" value="{$wx_item['pic'][$key]}"></td>
+<td class="r ct"><input name="config[wx_item][link][]" type="text"  value="{$wx_item['link'][$key]}"></td>
+</tr>
+</volist>
+<tr>
+<td class="l ct"><input name="config[wx_item][keyword][]" type="text" value=""></td>
+<td class="l ct"><input name="config[wx_item][title][]" type="text" value=""></td>
+<td class="l ct"><input name="config[wx_item][content][]" type="text" value=""></td>
+<td class="l ct"><input name="config[wx_item][pic][]" type="text"></td>
+<td class="r ct"><input name="config[wx_item][link][]" type="text"></td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+  <td colspan="5" class="r ct">
+	<input type="submit" class="submit" value="提交">
+	<label>关键词一栏留空则删除对应的规则</label>
+	</td>
+</tr>  
+</tfoot>
+</form>
+</table>
+</div>
+<!-- -->
+</div>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

@@ -1,0 +1,1 @@
+{:redirect(ff_url('vod/search',array('name'=>urlencode($search_wd.$search_name)),true))}

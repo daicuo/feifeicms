@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>后台用户管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script src="__PUBLIC__/ckeditor4.7.3/ckeditor.js"></script>
+<script src="__PUBLIC__/js/admin.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	//编辑器
+	CKEDITOR.replace('news_content',{
+		allowedContent: true,
+		filebrowserImageUploadUrl : './?g=admin&m=upload&a=ckeditor&sid=news'
+	}).setData($('#pre_content').html());
+	//表单
+	$("#myform").submit(function(){
+		if($feifeicms.form.empty('myform','news_name') == false){
+			return false;
+		}
+		if($("#news_cid").val()==0){
+			alert('请选择分类');
+			return false;
+		}
+	});
+	//tab效果
+	$("#tabs>a").click(function(){
+		var no = $(this).attr('id');
+		var n = $("#tabs>a").length;
+		showtab('tabs',no,n);
+		$("#tabs>a").removeClass("on");
+		$(this).addClass("on");
+		return false;
+	});
+	//默认选项点击选择
+	$(document).on("click", ".select", function(){
+		$id = $(this).attr('data-id');
+		if($id == 'news_type'||$id == 'news_keywords'){
+			$val = $("input[id='"+$id+"']").val();
+			if($val!=''){
+				$val = $val+',';
+			}
+			$("input[id='"+$id+"']").val($val+$(this).text());
+		}else{
+			$("input[id='"+$id+"']").val($(this).text());
+		}
+	});	
+	//常用TAG加载
+	$("#news_keywords_label").load("?s=Admin-Tag-Showajax-input-news_keywords-sid-news_tag");
+	// 分类change
+	$('#news_cid').on("change", function(){
+		$cid = $(this).children('option:selected').val();
+		if($cid){
+			$.getJSON('?s=Admin-List-extend-id-'+$cid, null, function(json){
+				if(json.status==1){
+				 $.each(json.data, function(key, value){
+					 if(value != ''){
+						 $("#news_"+key+"_label").empty();
+						 $.each(value, function(key2, value2){
+								$("#news_"+key+"_label").append('<a href="javascript:;" class="select" data-id="news_'+key+'">'+value2+'</a>');
+						 });
+					 }
+					});
+				}
+			});
+		}
+	});
+});
+</script>
+</head>
+<body class="body">
+<form action="?s=Admin-News-Update" method="post" name="myform" id="myform">
+<gt name="news_id" value="0">
+<input type="hidden" name="news_id" value="{$news_id}">
+</gt>
+<div class="title">
+	<div class="tabs" id="tabs"><a href="javascript:void(0)" class="on" id="1">{$news_tplname}文章</a><a href="javascript:void(0)" id="2">其它设置</a></div>
+    <div class="right"><a href="?s=Admin-News-Show">返回文章资讯</a></div>
+</div>
+<div class="add">
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs1">
+  <tr>
+    <td class="tl">文章名称：</td>
+    <td class="tr"><input type="text" name="news_name" id="news_name" value="{$news_name}" maxlength="255" error="* 名称不能为空" class="w400"> <lable>文章分类：<select name="news_cid" id="news_cid" style="width:108px"><option value="">请选择</option><volist name=":ff_mysql_list('sid:2;limit:0;order:list_pid asc,list_oid;sort:asc')" id="feifei"><option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$list_id">selected</eq>>{$feifei.list_name}</option><volist name="feifei.list_son" id="feifeison"><option value="{$feifeison.list_id}" <eq name="feifeison.list_id" value="$list_id">selected</eq>>├ {$feifeison.list_name}</option></volist></volist></select> </lable></td>
+  </tr>
+  <tr>
+    <td class="tl">链接别名：</td>
+    <td class="tr" style="position:relative"><input type="text" name="news_ename" id="news_ename"  maxlength="255" value="{$news_ename}" class="w400"> 更新日期：<label><input type="text" name="news_addtime" id="news_addtime" value="{$news_addtime|date='Y-m-d H:i:s',###}" class="w100"> <input name="checktime" type="checkbox" style="border:none;width:auto;position:absolute; top:8px" value="1" checked title="勾选则使用系统当前时间"></label></td>
+  </tr>
+  <tr>
+    <td class="tl">跳转URL：</td>
+    <td class="tr"><input type="text" name="news_jumpurl" id="news_jumpurl" value="{$news_jumpurl}" maxlength="150" class="w400"> 录入编辑：<label><input type="text" name="news_inputer" id="news_inputer" value="{$news_inputer}" maxlength="15" class="w100 ct"></label></td>
+  </tr>     
+  <tr>
+    <td class="tl">扩展分类：</td>
+    <td class="tr"><input type="text" name="news_type" id="news_type"  maxlength="255" value="{$news_type}" class="w400"><p id="news_type_label" style="padding:0; margin:5px 0 0 0"><volist name=":explode(',',$list_extend['type'])" id="val"><a href="javascript:;" class="select" data-id="news_type">{$val}</a></volist></td>
+  </tr>  
+  <tr>
+    <td class="tl">标签TAG：</td>
+    <td class="tr"><input type="text" name="news_keywords" id="news_keywords" maxlength="255" value="{$news_keywords}" class="w400 xy_tag"><p id="news_keywords_label" style="padding:0; margin:5px 0 0 0">常用TAG加载中...</p></td>
+  </tr>
+  <tr>
+    <td class="tl">海报图片：</td>
+    <td class="tr"><label style="float:left; margin-top:4px; margin-right:5px"><input type="text" name="news_pic" id="news_pic" maxlength="255" value="{$news_pic}" class="w400" onMouseOver="if(this.value)showpic(event, this.value,'{&upload_path}/');" onMouseOut="hiddenpic();"></label><iframe src="?s=Admin-Upload-Show-sid-news-fileback-news_pic" scrolling="no" topmargin="0" width="290" height="28" marginwidth="0" marginheight="0" frameborder="0" align="left" style="margin-top:4px; float:left"></iframe></span></td>
+  </tr>
+  <tr>
+    <td class="tl">轮播图片：</td>
+    <td class="tr"><label style="float:left; margin-top:4px; margin-right:5px"><input type="text" name="news_pic_slide" id="news_pic_slide" maxlength="255" value="{$news_pic_slide}" class="w400" onMouseOver="if(this.value)showpic(event, this.value,'{&upload_path}/');" onMouseOut="hiddenpic();"></label><iframe src="?s=Admin-Upload-Show-sid-news-fileback-news_pic_slide" scrolling="no" topmargin="0" width="290" height="28" marginwidth="0" marginheight="0" frameborder="0" align="left" style="margin-top:4px; float:left"></iframe></span></td>
+  </tr>
+  <tr>
+    <td class="tl">背景图片：</td>
+    <td class="tr"><label style="float:left; margin-top:4px; margin-right:5px"><input type="text" name="news_pic_bg" id="news_pic_bg" maxlength="255" value="{$news_pic_bg}" class="w400" onMouseOver="if(this.value)showpic(event, this.value,'{&upload_path}/');" onMouseOut="hiddenpic();"></label><iframe src="?s=Admin-Upload-Show-sid-news-fileback-news_pic_bg" scrolling="no" topmargin="0" width="290" height="28" marginwidth="0" marginheight="0" frameborder="0" align="left" style="margin-top:4px; float:left"></iframe></span></td>
+  </tr> 
+  <tr>
+    <td class="tl">来源标识：</td>
+    <td class="tr"><input type="text" name="news_reurl" id="news_reurl" value="{$news_reurl}" maxlength="150" class="w400"></td>
+  </tr>      
+  <tr>
+    <td class="tl">文章摘要：</td>
+    <td class="tr padding-5050"><textarea name="news_remark" id="news_remark" style="width:98%;height:70px;color:#666" title="如果不填写简介则自动截取内容前100字">{$news_remark}</textarea></td>
+  </tr>
+  <tr>
+    <td class="tl">文章内容：</td>
+    <td class="tr padding-5050"><textarea name="news_content" id="news_content"></textarea></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs2" style="display:none">
+  <tr>
+    <td class="tl">推荐星级：</td>
+    <td class="tr" id="abc"><input name="news_stars" id="news_stars" type="hidden" value="{$news_stars}"><volist name="news_starsarr" id="ajaxstar"><img src="__PUBLIC__/images/admin/star{$ajaxstar}.gif" onClick="addstars('news',{$i});" id="star_{$i}" class="navpoint"></volist></td>
+  </tr>
+  <tr>
+    <td class="tl">文章状态：</td>
+    <td class="tr"><select name="news_status" class="w70"><option value="1">显示</option><option value="0" <eq name="news_status" value="0">selected</eq>>隐藏</option></select></td>
+  </tr>  
+  <tr>
+    <td class="tl">标题颜色：</td>
+    <td class="tr" id="abc"><select name="news_color" id="news_color" class="w70"><option>颜色</option>                               
+    <option value='#000000' style='background-color:#000000' <eq name="news_color" value="#000000">selected</eq>></option>
+    <option value='#FFFFFF' style='background-color:#FFFFFF' <eq name="news_color" value="#FFFFFF">selected</eq>></option>
+    <option value='#008000' style='background-color:#008000' <eq name="news_color" value="#008000">selected</eq>></option>
+    <option value='#FFFF00' style='background-color:#FFFF00' <eq name="news_color" value="#FFFF00">selected</eq>></option>
+    <option value='#FF0000' style='background-color:#FF0000' <eq name="news_color" value="#FF0000">selected</eq>></option>
+    <option value='#0000FF' style='background-color:#0000FF' <eq name="news_color" value="#0000FF">selected</eq>></option>
+    <option value=''>无色</option></select></td>
+  </tr>
+  <tr>
+    <td class="tl">首字母：</td>
+    <td class="tr"><input type="text" name="news_letter" id="news_letter" value="{$news_letter}" maxlength="1" class="w150"></td>
+  </tr>       
+  <tr>
+    <td class="tl">总人气：</td>
+    <td class="tr"><input type="text" name="news_hits" id="news_hits" maxlength="15" value="{$news_hits}" class="w150"></td>
+  </tr> 
+  <tr>
+    <td class="tl">月人气：</td>
+    <td class="tr"><input type="text" name="news_hits_month" id="news_hits_month" maxlength="15" value="{$news_hits_month}" class="w150"></td>
+  </tr> 
+  <tr>
+    <td class="tl">周人气：</td>
+    <td class="tr"><input type="text" name="news_hits_week" id="news_hits_week" maxlength="15" value="{$news_hits_week}" class="w150"></td>
+  </tr>
+  <tr>
+    <td class="tl">日人气：</td>
+    <td class="tr"><input type="text" name="news_hits_day" id="news_hits_day" maxlength="15" value="{$news_hits_day}" class="w150"></td>
+  </tr> 
+  <tr>
+    <td class="tl">评分值：</td>
+    <td class="tr"><input type="text" name="news_gold" id="news_gold" value="{$news_gold}" maxlength="4" class="w150"></td>
+  </tr> 
+  <tr>
+    <td class="tl">评分人数：</td>
+    <td class="tr"><input type="text" name="news_golder" id="news_golder" value="{$news_golder}" maxlength="8" class="w150"></td>
+  </tr> 
+  <tr>
+    <td class="tl">顶：</td>
+    <td class="tr"><input type="text" name="news_up" id="news_up" value="{$news_up}" maxlength="8" class="w150"></td>
+  </tr>
+  <tr>
+    <td class="tl">踩：</td>
+    <td class="tr"><input type="text" name="news_down" id="news_down" value="{$news_down}" maxlength="8" class="w150"></td>
+  </tr>
+  <tr>
+    <td class="tl">独立模板：</td>
+    <td class="tr"><input type="text" name="news_skin" id="news_skin" value="{$news_skin}" maxlength="25" class="w150"></td>
+  </tr>	 
+  <tr>
+    <td class="tl">关联标识：</td>
+    <td class="tr">
+		<input type="text" name="news_series" id="news_series" value="{$news_series}" maxlength="120" class="w150">
+    <p class="lead">所有需要关联的模型统一设置一个关键词，如（变形金刚），留空则使用TAG标签关联。</p>
+		</td>
+  </tr>     
+</table>
+<ul class="footer">
+	<input type="submit" name="submit" value="提交"> <input type="reset" name="reset" value="重置">
+</ul>
+</div>
+</form>
+<pre id="pre_content" style="display:none">{$news_content}</pre>
+<include file="./Public/system/plus_showpic.html" />
+<include file="./Public/system/footer.html" />
+</body>
+</html>

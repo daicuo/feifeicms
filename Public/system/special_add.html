@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>专题添加与编辑</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script src="__PUBLIC__/js/admin.js"></script>
+<script src="__PUBLIC__/ckeditor4.7.3/ckeditor.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	CKEDITOR.replace('special_content',{
+		filebrowserImageUploadUrl : './?g=admin&m=upload&a=ckeditor&sid=special'
+	}).setData($('#pre_content').html());
+	//表单
+	$("#myform").submit(function(){
+		if($feifeicms.form.empty('myform','special_name') == false){
+			return false;
+		}
+	});
+	//TAB标签
+	$("#tabs>a").click(function(){
+		var no = $(this).attr('id');
+		var n = $("#tabs>a").length;
+		showtab('tabs',no,n);
+		$("#tabs>a").removeClass("on");
+		$(this).addClass("on");
+		return false;
+	});
+	//扩展分类点击选择
+	$(document).on("click", ".select", function(){
+		$id = $(this).attr('data-id');
+		if($id == 'special_type'){
+			$val = $("input[id='"+$id+"']").val();
+			if($val == ''){
+				$val = $(this).text();
+			}else{
+				$val = $val+','+$(this).text();
+				$val = $val.split(',').unique().join(',');//排重
+			}
+			$("input[id='"+$id+"']").val($val);
+		}
+	});
+	//分类change
+	$('#special_cid').on("change", function(){
+		$cid = $(this).children('option:selected').val();
+		if($cid){
+			$.getJSON('?s=Admin-List-extend-id-'+$cid, null, function(json){
+				if(json.status == 1){
+				 $.each(json.data, function(key, value){
+					 if(value != ''){
+						 $("#specail_"+key+"_label").empty();
+						 $.each(value, function(key2, value2){
+								$("#specail_"+key+"_label").append('<a href="javascript:;" class="select" data-id="special_'+key+'">'+value2+'</a>');
+						 });
+					 }
+					});
+				}
+			});
+		}
+	});
+});
+</script>
+</head>
+<body class="body">
+<form action="?s=Admin-Special-Update" method="post" name="myform" id="myform">
+<gt name="special_id" value="0">
+  <input type="hidden" name="special_id" value="{$special_id}">
+</gt>
+<div class="title">
+	<div class="tabs" id="tabs">
+  	<a href="javascript:void(0)" class="on" id="1">{$tpltitle}专题</a>
+    <a href="javascript:void(0)" id="2">SEO设置</a>
+  	<a href="javascript:void(0)" id="3">其它设置</a>
+  </div>
+  <div class="right">
+  	<a href="?s=Admin-Special-Show">返回专题管理</a>
+  </div>
+</div>
+<div class="add">
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs1">
+  <tr>
+    <td class="tl">专题名称：</td>
+    <td class="tr"><input type="text" name="special_name" id="special_name" value="{$special_name}" maxlength="255" error="* 名称不能为空" class="w400">
+		<select name="special_cid" id="special_cid" style="width:108px"><option value="">请选择分类</option><volist name=":ff_mysql_list('sid:3;limit:0;order:list_pid asc,list_oid;sort:asc')" id="feifei"><option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$special_cid">selected</eq>>{$feifei.list_name}</option><volist name="feifei.list_son" id="feifeison"><option value="{$feifeison.list_id}" <eq name="feifeison.list_id" value="$special_cid">selected</eq>>├ {$feifeison.list_name}</option></volist></volist></select>
+		<span id="special_name_error"></span>
+    </td>
+  </tr>
+  <tr>
+    <td class="tl">链接别名：</td>
+    <td class="tr"><input type="text" name="special_ename" id="special_ename" value="{$special_ename}" maxlength="255" class="w400">
+    </td>
+  </tr>  
+  <tr>
+    <td class="tl">小图片：</td>
+    <td class="tr">
+    <span style="float:left"><input type="text" name="special_logo" id="special_logo" value="{$special_logo}" maxlength="255" class="w400" onMouseOver="if(this.value)showpic(event, this.value,'{&upload_path}/');" onMouseOut="hiddenpic();"></span>
+    <span style="float:left; margin-left:20px"><iframe src="?s=Admin-Upload-Show-sid-special-fileback-special_logo" scrolling="no" topmargin="0" width="270" height="26" marginwidth="0" marginheight="0" frameborder="0" align="left"></iframe></span>
+   </td>
+  </tr>
+  <tr>
+    <td class="tl">大图片：</td>
+    <td class="tr">
+    <span style="float:left"><input type="text" name="special_banner" id="special_banner" value="{$special_banner}" maxlength="255" class="w400" onMouseOver="if(this.value)showpic(event, this.value,'{&upload_path}/');" onMouseOut="hiddenpic();"></span>
+    <span style="float:left; margin-left:20px"><iframe src="?s=Admin-Upload-Show-sid-special-fileback-special_banner" scrolling="no" topmargin="0" width="270" height="26" marginwidth="0" marginheight="0" frameborder="0" align="left"></iframe></span></td>
+  </tr> 
+  <tr>
+    <td class="tl">标签收录（多个逗号分隔）：</td>
+    <td class="tr"><input type="text" name="special_tag_name" id="special_tag_name" value="{$special_tag_name}" maxlength="255" class="w400">&nbsp;推荐</td>
+  </tr>
+  <tr>
+    <td class="tl">影片ID收录（多个逗号分隔）：</td>
+    <td class="tr"><input type="text" name="special_ids_vod" id="special_ids_vod" value="{$special_ids_vod}" maxlength="255" class="w400">&nbsp;<a href="?s=admin-vod-show" target="_blank">选择</a></td>
+  </tr> 
+  <tr>
+    <td class="tl">文章ID收录（多个逗号分隔）：</td>
+    <td class="tr"><input type="text" name="special_ids_news" id="special_ids_news" value="{$special_ids_news}" maxlength="255" class="w400">&nbsp;<a href="?s=admin-news-show" target="_blank">选择</a></td>
+  </tr> 
+  <tr>
+    <td class="tl">扩展分类：</td>
+    <td class="tr"><input type="text" name="special_type" id="special_type" maxlength="255" value="{$special_type}" class="w400">
+		<label id="specail_type_label" style="padding:0; margin:5px 0 0 0"><volist name=":explode(',',$list_extend['type'])" id="val"><a href="javascript:;" class="select" data-id="special_type">{$val}</a></volist></label>
+		</td>
+  </tr>	    
+  <tr>
+    <td class="tl">专题描述：</td>
+    <pre id="pre_content" style="display:none">{$special_content}</pre>
+    <td class="tr padding-5050"><textarea name="special_content" id="special_content"></textarea></td>
+  </tr> 
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs2" style="display:none">
+  <tr>
+    <td class="tl">SEO标题：</td>
+    <td class="tr"><input type="text" name="special_title" id="special_title" value="{$special_title}" maxlength="255" class="w400">&nbsp;</td>
+  </tr>  
+  <tr>
+    <td class="tl">SEO关键词：</td>
+    <td class="tr"><input type="text" name="special_keywords" id="special_keywords" value="{$special_keywords}" maxlength="255" class="w400">&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="tl">SEO描述信息：</td>
+    <td class="tr"><input type="text" name="special_description" id="special_description" value="{$special_description}" maxlength="255" class="w400">&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="tl">独立模板名称：</td>
+    <td class="tr"><input type="text" name="special_skin" id="special_skin" value="{$special_skin}" maxlength="25" class="w400"></td>
+  </tr>   
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs3" style="display:none">
+  <tr>
+    <td class="tl">创建时间：</td>
+    <td class="tr" style="position:relative"><input type="text" name="special_addtime" id="special_addtime" maxlength="15" value="{$special_addtime|date='Y-m-d H:i:s',###}" class="w150"> <input name="checktime" type="checkbox" style="border:none;width:auto; position: absolute; top:10px;" value="1" checked title="勾选则使用系统当前时间"></td>
+  </tr> 
+  <tr>
+    <td class="tl">推荐星级：</td>
+    <td class="tr" id="abc"><input name="special_stars" id="special_stars" type="hidden" value="{$special_stars}"><volist name="special_starsarr" id="ajaxstar"><img src="__PUBLIC__/images/admin/star{$ajaxstar}.gif" onClick="addstars('news',{$i});" id="star_{$i}" class="navpoint"></volist></td>
+  </tr>
+  <tr>
+    <td class="tl">文章状态：</td>
+    <td class="tr"><select name="special_status" class="w100 ct"><option value="1">显示</option><option value="0" <eq name="special_status" value="0">selected</eq>>隐藏</option></select></td>
+  </tr>  
+  <tr>
+    <td class="tl">标题颜色：</td>
+    <td class="tr" id="abc"><select name="special_color" id="special_color" class="w100 ct"><option>颜色</option>                               
+    <option value='#000000' style='background-color:#000000' <eq name="special_color" value="#000000">selected</eq>></option>
+    <option value='#FFFFFF' style='background-color:#FFFFFF' <eq name="special_color" value="#FFFFFF">selected</eq>></option>
+    <option value='#008000' style='background-color:#008000' <eq name="special_color" value="#008000">selected</eq>></option>
+    <option value='#FFFF00' style='background-color:#FFFF00' <eq name="special_color" value="#FFFF00">selected</eq>></option>
+    <option value='#FF0000' style='background-color:#FF0000' <eq name="special_color" value="#FF0000">selected</eq>></option>
+    <option value='#0000FF' style='background-color:#0000FF' <eq name="special_color" value="#0000FF">selected</eq>></option>
+    <option value=''>无色</option></select></td>
+  </tr>      
+  <tr>
+    <td class="tl">总人气：</td>
+    <td class="tr"><input type="text" name="special_hits" id="special_hits" maxlength="15" value="{$special_hits}" class="w100 ct"></td>
+  </tr> 
+  <tr>
+    <td class="tl">月人气：</td>
+    <td class="tr"><input type="text" name="special_hits_month" id="special_hits_month" maxlength="15" value="{$special_hits_month}" class="w100 ct"></td>
+  </tr> 
+  <tr>
+    <td class="tl">周人气：</td>
+    <td class="tr"><input type="text" name="special_hits_week" id="special_hits_week" maxlength="15" value="{$special_hits_week}" class="w100 ct"></td>
+  </tr>
+  <tr>
+    <td class="tl">日人气：</td>
+    <td class="tr"><input type="text" name="special_hits_day" id="special_hits_day" maxlength="15" value="{$special_hits_day}" class="w100 ct"></td>
+  </tr> 
+  <tr>
+    <td class="tl">评分值：</td>
+    <td class="tr"><input type="text" name="special_gold" id="special_gold" value="{$special_gold}" maxlength="4" class="w100 ct"></td>
+  </tr> 
+  <tr>
+    <td class="tl">评分参与人数：</td>
+    <td class="tr"><input type="text" name="special_golder" id="special_golder" value="{$special_golder}" maxlength="8" class="w100 ct"></td>
+  </tr> 
+  <tr>
+    <td class="tl">顶：</td>
+    <td class="tr"><input type="text" name="special_up" id="special_up" value="{$special_up}" maxlength="8" class="w100 ct"></td>
+  </tr>
+  <tr>
+    <td class="tl">踩：</td>
+    <td class="tr"><input type="text" name="special_down" id="special_down" value="{$special_down}" maxlength="8" class="w100 ct"></td>
+  </tr> 
+</table>
+<ul class="footer">
+	<input type="submit" name="submit" value="提交"> <input type="reset" name="reset" value="重置">
+</ul>
+</div>
+</form>
+<include file="./Public/system/plus_showpic.html" />
+<include file="./Public/system/footer.html" />
+</body>
+</html>

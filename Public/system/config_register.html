@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>注册与访问配置</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+</head>
+<body class="body">
+<div class="title">
+  <div class="left">注册参数配置</div>
+</div>
+<div class="add">
+  <form action="?s=Admin-Config-Update-type-user" method="post" name="myform" id="myform">
+  <ul><li class="left">是否开放注册：</li>
+    <li class="right">
+    	<input type="radio" class="radio" name="config[user_register]" value="1" <eq name="user_register" value="1">checked="checked"</eq> />开启
+      <input type="radio" class="radio" name="config[user_register]" value="0" <eq name="user_register" value="0">checked="checked"</eq> />关闭
+     </li>
+  </ul>
+  <ul><li class="left">注册后需要审核：</li>
+    <li class="right">
+    <input type="radio" class="radio" name="config[user_register_check]" value="1" <eq name="user_register_check" value="1">checked="checked"</eq>/>开启
+    <input type="radio" class="radio" name="config[user_register_check]" value="0" <eq name="user_register_check" value="0">checked="checked"</eq>/>关闭
+    </li>
+  </ul>
+  <ul><li class="left">注册后赠送影币：</li>
+    <li class="right"><input type="text" class="w120" name="config[user_register_score]" maxlength="4" value="{$user_register_score|default=0}"></li>
+  </ul>  
+  <ul><li class="left">注册后赠送VIP天数：</li>
+    <li class="right"><input type="text" class="w120" name="config[user_register_vipday]" maxlength="4" value="{$user_register_vipday|default=0}"></li>
+  </ul>
+  <ul><li class="left">成功邀请用户奖励影币：</li>
+    <li class="right"><input type="text" class="w120" name="config[user_register_score_pid]" maxlength="4" value="{$user_register_score_pid|default=0}">
+    <label>留空则不启用下线推广功能</label></li>
+  </ul>  
+  <ul><li class="left">注册时间间隔（秒）：</li>
+    <li class="right"><input type="text" class="w120" name="config[user_register_second]" maxlength="8" value="{$user_register_second}"></li>
+  </ul>
+  <ul><li class="left">注册后发送欢迎邮件内容：</li>
+    <li class="right" style="height:220px;">
+    <textarea name="config[user_register_welcome]" id="user_register_welcome" style="width:400px;height:150px">{$user_register_welcome}</textarea>
+    <p>留空则不启用该功能，如需启用该功能请务必先确认邮件系统能正常发送邮件</p>
+    <p>支持变量有：{username} : 用户名、{sitename} : 网站名称、{time} : 发送时间</p>
+    </li>
+  </ul> 
+  <!-- -->
+  <ul class="footer">
+    <input type="submit" name="submit" value="提交"> <input type="reset" name="reset" value="重置">
+  </ul>
+  </form>
+</div>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

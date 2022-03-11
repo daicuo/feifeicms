@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>角色采集管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script src="__PUBLIC__/js/admin.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$feifeicms.show.table();
+});
+</script>
+</head>
+<body class="body ff-cj">
+<div class="title">
+	<div class="left">角色资源库说明</div>
+</div>
+<div class="add">
+	<div class="left">
+  <notempty name="jumpurl"><p><a href="{$jumpurl}" style="color:#F00" target="_blank">上次有采集任务没有完成，是否接着采集?</a></p></notempty>
+  <p>角色资源库需要关联视频与明星，三者准确的关联关系由角色起到桥梁作用来完成。</p>
+	<p>自检规则为角色来源与豆瓣ID则可以准确无误、上述两种没有值的情况下主演、片名、名称多种条件来确定是否已录入该角色。</p>
+  <p>关联规则为优先豆瓣ID与豆瓣影人则可以准确无误对应、上述豆瓣两种ID没有值的情况下将以名称来完成。</p>
+  </div>
+</div>
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<thead><tr><th colspan="7" class="r">
+<span style="float:left">API资源站（视频）列表</span>
+<span style="float:right"><a href="?s=Admin-Cj-Add">添加资源库</a></span>
+</th></tr></thead>
+<volist name="list_cj" id="feifei">
+<tr>
+<td class="r pd">{$i}、</td>
+<td class="r pd"><a href="?s=Admin-Cj-Apis-cjid-{$feifei.cj_id}-cjtype-9-apikey-{$feifei.cj_appkey}-action-show-xmlurl-{$feifei.cj_url|base64_encode}" class="h"><b>{$feifei.cj_name}</b> {$feifei.cj_url}</a></td>
+<td class="l ct"><a href="?s=Admin-Cj-Apis-cjid-{$feifei.cj_id}-cjtype-9-apikey-{$feifei.cj_appkey}-action-show-xmlurl-{$feifei.cj_url|base64_encode}#bind">分类转换</a></td>
+<td class="l ct"><a href="?s=Admin-Cj-Apis-cjid-{$feifei.cj_id}-cjtype-9-apikey-{$feifei.cj_appkey}-action-days-xmlurl-{$feifei.cj_url|base64_encode}-h-24" target="_blank">采集当天</a></td>
+<td class="l ct"><a href="?s=Admin-Cj-Apis-cjid-{$feifei.cj_id}-cjtype-9-apikey-{$feifei.cj_appkey}-action-days-xmlurl-{$feifei.cj_url|base64_encode}-h-98" target="_blank">采集本周</a></td>
+<td class="l ct"><a href="?s=Admin-Cj-Apis-cjid-{$feifei.cj_id}-cjtype-9-apikey-{$feifei.cj_appkey}-action-all-xmlurl-{$feifei.cj_url|base64_encode}" target="_blank">采集所有</a></td>
+<td class="r ct"><a href="?s=Admin-Cj-Add-id-{$feifei.cj_id}">修改</a> <a href="?s=Admin-Cj-Del-id-{$feifei.cj_id}" onClick="return confirm('确定删除吗?')" title="点击删除">删除</a></td>
+</tr>
+</volist>
+</table>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

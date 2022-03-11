@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>人物添加</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script src="__PUBLIC__/js/admin.js"></script>
+<script src="__PUBLIC__/ckeditor4.7.3/ckeditor.js"></script>
+</head>
+<body class="body">
+<include file="./Public/system/plus_showpic.html" />
+<form action="?s=Admin-Star-Update" method="post" name="myform" id="myform">
+<input type="hidden" name="person_sid" value="8">
+<gt name="person_id" value="0">
+<input type="hidden" name="person_id" value="{$person_id}">
+</gt>
+<div class="title">
+	<div class="tabs" id="tabs">
+		<a href="javascript:void(0)" class="on" id="1">{$person_tplname}人物</a>
+		<a href="javascript:void(0)" id="2">扩展信息</a>
+		<a href="javascript:void(0)" id="3">主要成就</a>
+	</div>
+  <div class="right"><a href="?s=Admin-Star-Show">返回明星管理</a></div>
+</div>
+<div class="add">
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs1">
+  <tr>
+    <td class="tl">明星名称：</td>
+    <td class="tr"><input type="text" name="person_name" id="person_name" value="{$person_name}" maxlength="255" error="* 名称不能为空" class="w300">
+    分类：<label><select name="person_cid" id="person_cid" style="width:107px"><option value="">请选择</option><volist name=":ff_mysql_list('sid:8;limit:0;order:list_pid asc,list_oid;sort:asc')" id="feifei"><option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$person_cid">selected</eq>>{$feifei.list_name}</option><volist name="feifei.list_son" id="feifeison"><option value="{$feifeison.list_id}" <eq name="feifeison.list_id" value="$person_cid">selected</eq>>├ {$feifeison.list_name}</option></volist></volist></select></label>
+		性别：<label><select name="person_gender" id="person_gender" style="width:107px"><option value="">未知</option><option value="男" <eq name="person_gender" value="男">selected</eq>>男</option><option value="女" <eq name="person_gender" value="女">selected</eq>>女</option><option value="组合" <eq name="person_gender" value="组合">selected</eq>>组合</option><option value="变性" <eq name="person_gender" value="变性">selected</eq>>变性</option></select></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">明星别名：</td>
+    <td class="tr">
+		<input type="text" name="person_alias" id="person_alias" maxlength="255" value="{$person_alias}" class="w300">
+		体重：<label><input type="text" name="person_weight" id="person_weight" value="{$person_weight}" placeholder="KG" maxlength="6" class="w100 ct"></label>
+		身高：<label><input type="text" name="person_height" id="person_height" value="{$person_height}" placeholder="CM" maxlength="6" class="w100 ct"></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">链接拼音：</td>
+    <td class="tr">
+		<input type="text" name="person_ename" id="person_ename" value="{$person_ename}" maxlength="120" class="w300">
+		血型：<label><input type="text" name="person_blood" id="person_blood" maxlength="3" value="{$person_blood}" placeholder="a,ab,b,o" class="w100 ct"></label>
+		国籍：<label><input type="text" name="person_nationality" id="person_nationality" maxlength="100" value="{$person_nationality}" placeholder="中国" class="w100 ct"></label>
+	</td>
+  </tr>	
+  <tr>
+    <td class="tl">主要职业：</td>
+    <td class="tr">
+		<input type="text" name="person_profession" id="person_profession" value="{$person_profession}" placeholder="演员,导演" class="w300"></label>
+		星座：<label><input type="text" name="person_astrology" id="person_astrology" value="{$person_astrology}" class="w100"></label>
+		生日：<label><input type="text" name="person_birthday" id="person_birthday" value="{$person_birthday}" class="w100"></label></td>
+  </tr>
+  <tr>
+    <td class="tl">毕业院校：</td>
+    <td class="tr" style="position:relative">
+		<input type="text" name="person_school" id="person_school" value="{$person_school}" class="w300">
+		权重：<label><input type="text" name="person_stars" id="person_stars" value="{$person_stars|intval}" maxlength="1" class="w100 ct"></label>
+		日期：<label><input type="text" name="person_addtime" id="person_addtime" value="{$person_addtime|date='Y-m-d H:i:s',###}" class="w100"> <input name="checktime" type="checkbox" style="border:none;width:auto;position:absolute; top:8px" value="1" checked title="勾选则使用系统当前时间"></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">经纪公司：</td>
+    <td class="tr">
+		<input type="text" name="person_broker" id="person_broker" maxlength="255" value="{$person_broker}" class="w300">
+		模板：<label><input type="text" name="person_skin" id="person_skin" value="{$person_skin}" maxlength="30" class="w100 ct"></label>
+		字母：<label><input type="text" name="person_letter" id="person_letter" value="{$person_letter}" maxlength="2" class="w100 ct"></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">扩展分类：</td>
+    <td class="tr"><input type="text" name="person_type" id="person_type" maxlength="255" value="{$person_type}" class="w300">
+		<label id="specail_type_label" style="padding:0; margin:5px 0 0 0"><volist name=":explode(',',$list_extend['type'])" id="val"><a href="javascript:;" class="select" data-id="person_type">{$val}</a></volist></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">封面图片：</td>
+    <td class="tr"><label style="float:left; margin-top:3px; margin-right:5px"><input type="text" name="person_pic" id="person_pic" maxlength="255" value="{$person_pic}" class="w300" onMouseOver="if(this.value)showpic(event,this.value,'{&upload_path}/');" onMouseOut="hiddenpic();"></label><iframe src="?s=Admin-Upload-Show-sid-star-fileback-person_pic" scrolling="no" topmargin="0" width="280" height="26" marginwidth="0" marginheight="0" frameborder="0" align="left" style="margin-top:3px; float:left"></iframe></td>
+  </tr>
+  <tr>
+    <td class="tl">轮播图片：</td>
+    <td class="tr"><label style="float:left; margin-top:3px; margin-right:5px"><input type="text" name="person_pic_slide" id="person_pic_slide" maxlength="255" value="{$person_pic_slide}" class="w300" onMouseOver="if(this.value)showpic(event,this.value,'{&upload_path}/');" onMouseOut="hiddenpic();"></label><iframe src="?s=Admin-Upload-Show-sid-star-fileback-person_pic_slide" scrolling="no" topmargin="0" width="280" height="26" marginwidth="0" marginheight="0" frameborder="0" align="left" style="margin-top:3px; float:left"></iframe></td>
+  </tr> 
+  <tr>
+    <td class="tl">背景图片：</td>
+    <td class="tr"><label style="float:left; margin-top:3px; margin-right:5px"><input type="text" name="person_pic_bg" id="person_pic_bg" maxlength="255" value="{$person_pic_bg}" class="w300" onMouseOver="if(this.value)showpic(event,this.value,'{&upload_path}/');" onMouseOut="hiddenpic();"></label><iframe src="?s=Admin-Upload-Show-sid-star-fileback-person_pic_bg" scrolling="no" topmargin="0" width="280" height="26" marginwidth="0" marginheight="0" frameborder="0" align="left" style="margin-top:3px; float:left"></iframe></td>
+  </tr>
+  <tr>
+    <td class="tl">明星简介：</td>
+    <td class="tr padding-5050"><textarea name="person_intro" id="person_intro" style="width:98%;height:70px;color:#666" placeholder="如果不填写则自动截取内容前100字">{$person_intro}</textarea></td>
+  </tr>
+  <tr>
+    <td class="tl">明星资料：</td>
+    <td class="tr padding-5050"><textarea name="person_content" id="person_content">{$person_content}</textarea></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs2" style="display:none">
+  <tr>
+    <td class="tl">明星状态：</td>
+    <td class="tr">
+		<select name="person_status" style="width:157px">
+		<option value="1">显示</option>
+		<option value="0" <eq name="person_status" value="0">selected</eq>>隐藏</option>
+		</select>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">总人气：</td>
+    <td class="tr">
+		<input type="text" name="person_hits" id="person_hits" maxlength="15" value="{$person_hits|intval}" class="w150">
+		月人气：<label><input type="text" name="person_hits_month" id="person_hits_month" maxlength="15" value="{$person_hits_month|intval}" class="w150"></label>
+		</td>
+  </tr>       
+  <tr>
+    <td class="tl">周人气：</td>
+    <td class="tr">
+		<input type="text" name="person_hits_week" id="person_hits_week" maxlength="15" value="{$person_hits_week|intval}" class="w150">
+		日人气：<label><input type="text" name="person_hits_day" id="person_hits_day" maxlength="15" value="{$person_hits_day|intval}" class="w150"></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">评分值：</td>
+    <td class="tr">
+		<input type="text" name="person_gold" id="person_gold" value="{$person_gold|default='0'}" maxlength="4" class="w150">
+		评分人：<label><input type="text" name="person_golder" id="person_golder" value="{$person_golder|intval}" maxlength="8" class="w150"></label>
+		</td>
+  </tr> 
+  <tr>
+    <td class="tl">点赞数：</td>
+    <td class="tr">
+		<input type="text" name="person_up" id="person_up" value="{$person_up|intval}" maxlength="8" class="w150">
+		踩一下：<label><input type="text" name="person_down" id="person_down" value="{$person_down|intval}" maxlength="8" class="w150"></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">SEO标题：</td>
+    <td class="tr"><input type="text" name="person_title" id="person_title" value="{$person_title}" maxlength="255" class="w400">&nbsp;</td>
+  </tr>  
+  <tr>
+    <td class="tl">SEO关键词：</td>
+    <td class="tr"><input type="text" name="person_keywords" id="person_keywords" value="{$person_keywords}" maxlength="255" class="w400">&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="tl">SEO描述信息：</td>
+    <td class="tr"><input type="text" name="person_description" id="person_description" value="{$person_description}" maxlength="255" class="w400">&nbsp;</td>
+  </tr>	
+  <tr>
+    <td class="tl">来源标识：</td>
+    <td class="tr">
+		<input type="text" name="person_reurl" id="person_reurl" value="{$person_reurl}" maxlength="150" class="w400">
+		</td>
+  </tr>	
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs3" style="display:none">
+  <tr>
+    <td class="tr padding-5050"><textarea name="person_achievement" id="person_achievement">{$person_achievement}</textarea></td>
+  </tr>
+</table>
+<ul class="footer">
+	<input type="submit" name="submit" value="提交"> <input type="reset" name="reset" value="重置">
+</ul>
+</div>
+</form>
+<include file="./Public/system/footer.html" />
+<script type="text/javascript">
+//编辑器调用
+CKEDITOR.replace('person_content',{
+	filebrowserImageUploadUrl : './?g=admin&m=upload&a=ckeditor&sid=star'
+});
+//编辑器调用
+CKEDITOR.replace('person_achievement',{
+	filebrowserImageUploadUrl : './?g=admin&m=upload&a=ckeditor&sid=star'
+});
+//tabs标签
+$("#tabs>a").click(function(){
+	var no = $(this).attr('id');
+	var n = $("#tabs>a").length;
+	showtab('tabs',no,n);
+	$("#tabs>a").removeClass("on");
+	$(this).addClass("on");
+	return false;
+});
+//扩展分类点击选择
+$(document).on("click", ".select", function(){
+	$id = $(this).attr('data-id');
+	if($id == 'person_type'){
+		$val = $("input[id='"+$id+"']").val();
+		if($val == ''){
+			$val = $(this).text();
+		}else{
+			$val = $val+','+$(this).text();
+			$val = $val.split(',').unique().join(',');
+		}
+		$("input[id='"+$id+"']").val($val);
+	}
+});
+//表单提交
+$("#myform").submit(function(){
+	if($("#person_cid").val()==0){
+		alert('请选择分类');
+		return false;
+	}
+});
+</script>
+</body>
+</html>

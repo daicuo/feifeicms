@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>角色添加</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script src="__PUBLIC__/jquery.devbridge-autocomplete/1.4.7/jquery.autocomplete.min.js"></script>
+<script src="__PUBLIC__/ckeditor4.7.3/ckeditor.js"></script>
+<script src="__PUBLIC__/js/admin.js"></script>
+</head>
+<body class="body">
+<include file="./Public/system/plus_showpic.html" />
+<form action="?s=Admin-Role-Update" method="post" name="myform" id="myform">
+<input type="hidden" name="person_sid" value="9">
+<gt name="person_id" value="0">
+<input type="hidden" name="person_id" value="{$person_id}">
+</gt>
+<div class="title">
+	<div class="tabs" id="tabs">
+		<a href="javascript:void(0)" class="on" id="1">{$person_tplname}角色</a>
+		<a href="javascript:void(0)" id="2">扩展信息</a>
+	</div>
+  <div class="right"><a href="?s=Admin-Role-Show">返回角色管理</a></div>
+</div>
+<div class="add">
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs1">
+  <tr>
+    <td class="tl">角色名称：</td>
+    <td class="tr"><input type="text" name="person_name" id="person_name" value="{$person_name}" maxlength="255" error="* 名称不能为空" class="w300">
+    分类：<label><select name="person_cid" id="person_cid" style="width:107px"><option value="">请选择</option><volist name=":ff_mysql_list('sid:9;limit:0;order:list_pid asc,list_oid;sort:asc')" id="feifei"><option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$person_cid">selected</eq>>{$feifei.list_name}</option><volist name="feifei.list_son" id="feifeison"><option value="{$feifeison.list_id}" <eq name="feifeison.list_id" value="$person_cid">selected</eq>>├ {$feifeison.list_name}</option></volist></volist></select></label>
+		状态：<label><select name="person_status" style="width:107px"><option value="1">显示</option><option value="0" <eq name="person_status" value="0">selected</eq>>隐藏</option></select>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">角色别名：</td>
+    <td class="tr" style="position:relative">
+		<input type="text" name="person_alias" id="person_alias" maxlength="255" value="{$person_alias}" class="w300">
+		权重：<label><input type="text" name="person_stars" id="person_stars" value="{$person_stars|intval}" maxlength="1" class="w100 ct"></label>
+		日期：<label><input type="text" name="person_addtime" id="person_addtime" value="{$person_addtime|date='Y-m-d H:i:s',###}" class="w100"> <input name="checktime" type="checkbox" style="border:none;width:auto;position:absolute; top:8px" value="1" checked title="勾选则使用系统当前时间"></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">链接拼音：</td>
+    <td class="tr">
+		<input type="text" name="person_ename" id="person_ename" value="{$person_ename}" maxlength="120" class="w300">
+		模板：<label><input type="text" name="person_skin" id="person_skin" value="{$person_skin}" maxlength="30" class="w100 ct"></label>
+		字母：<label><input type="text" name="person_letter" id="person_letter" value="{$person_letter}" maxlength="2" class="w100 ct"></label>
+	</td>
+  </tr>
+  <tr>
+    <td class="tl">演员名字：</td>
+    <td class="tr" style="position:relative">
+		<input type="text" name="person_father_name" id="person_father_name" maxlength="255" value="{$person_father_name}" class="w300">
+		编号：<label><input type="text" name="person_father_id" id="person_father_id" value="{$person_father_id}" maxlength="30" class="w100 ct"></label>
+		</td>
+  </tr>	
+  <tr>
+    <td class="tl">所属视频：</td>
+    <td class="tr" style="position:relative">
+		<input type="text" name="person_object_name" id="person_object_name" value="{$person_object_name}" class="w300">
+		编号：<label><input type="text" name="person_object_id" id="person_object_id" value="{$person_object_id}" maxlength="30" class="w100 ct"></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">扩展分类：</td>
+    <td class="tr"><input type="text" name="person_type" id="person_type" maxlength="255" value="{$person_type}" class="w300">
+		<label id="specail_type_label" style="padding:0; margin:5px 0 0 0"><volist name=":explode(',',$list_extend['type'])" id="val"><a href="javascript:;" class="select" data-id="person_type">{$val}</a></volist></label>
+		</td>
+  </tr>			
+  <tr>
+    <td class="tl">封面图片：</td>
+    <td class="tr"><label style="float:left; margin-top:3px; margin-right:5px"><input type="text" name="person_pic" id="person_pic" maxlength="255" value="{$person_pic}" class="w300" onMouseOver="if(this.value)showpic(event,this.value,'{&upload_path}/');" onMouseOut="hiddenpic();"></label><iframe src="?s=Admin-Upload-Show-sid-role-fileback-person_pic" scrolling="no" topmargin="0" width="280" height="26" marginwidth="0" marginheight="0" frameborder="0" align="left" style="margin-top:3px; float:left"></iframe></td>
+  </tr>
+  <tr>
+    <td class="tl">轮播图片：</td>
+    <td class="tr"><label style="float:left; margin-top:3px; margin-right:5px"><input type="text" name="person_pic_slide" id="person_pic_slide" maxlength="255" value="{$person_pic_slide}" class="w300" onMouseOver="if(this.value)showpic(event,this.value,'{&upload_path}/');" onMouseOut="hiddenpic();"></label><iframe src="?s=Admin-Upload-Show-sid-role-fileback-person_pic_slide" scrolling="no" topmargin="0" width="280" height="26" marginwidth="0" marginheight="0" frameborder="0" align="left" style="margin-top:3px; float:left"></iframe></td>
+  </tr> 
+  <tr>
+    <td class="tl">背景图片：</td>
+    <td class="tr"><label style="float:left; margin-top:3px; margin-right:5px"><input type="text" name="person_pic_bg" id="person_pic_bg" maxlength="255" value="{$person_pic_bg}" class="w300" onMouseOver="if(this.value)showpic(event,this.value,'{&upload_path}/');" onMouseOut="hiddenpic();"></label><iframe src="?s=Admin-Upload-Show-sid-role-fileback-person_pic_bg" scrolling="no" topmargin="0" width="280" height="26" marginwidth="0" marginheight="0" frameborder="0" align="left" style="margin-top:3px; float:left"></iframe></td>
+  </tr>
+  <tr>
+    <td class="tl">角色简介：</td>
+    <td class="tr padding-5050"><textarea name="person_intro" id="person_intro" style="width:98%;height:70px;color:#666" placeholder="如果不填写则自动截取内容前100字">{$person_intro}</textarea></td>
+  </tr>
+  <tr>
+    <td class="tl">角色资料：</td>
+    <td class="tr padding-5050"><textarea name="person_content" id="person_content">{$person_content}</textarea></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs2" style="display:none">
+  <tr>
+    <td class="tl">总人气：</td>
+    <td class="tr">
+		<input type="text" name="person_hits" id="person_hits" maxlength="15" value="{$person_hits|intval}" class="w150">
+		月人气：<label><input type="text" name="person_hits_month" id="person_hits_month" maxlength="15" value="{$person_hits_month|intval}" class="w150"></label>
+		</td>
+  </tr>       
+  <tr>
+    <td class="tl">周人气：</td>
+    <td class="tr">
+		<input type="text" name="person_hits_week" id="person_hits_week" maxlength="15" value="{$person_hits_week|intval}" class="w150">
+		日人气：<label><input type="text" name="person_hits_day" id="person_hits_day" maxlength="15" value="{$person_hits_day|intval}" class="w150"></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">评分值：</td>
+    <td class="tr">
+		<input type="text" name="person_gold" id="person_gold" value="{$person_gold|default='0'}" maxlength="4" class="w150">
+		评分人：<label><input type="text" name="person_golder" id="person_golder" value="{$person_golder|intval}" maxlength="8" class="w150"></label>
+		</td>
+  </tr> 
+  <tr>
+    <td class="tl">点赞数：</td>
+    <td class="tr">
+		<input type="text" name="person_up" id="person_up" value="{$person_up|intval}" maxlength="8" class="w150">
+		踩一下：<label><input type="text" name="person_down" id="person_down" value="{$person_down|intval}" maxlength="8" class="w150"></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">SEO标题：</td>
+    <td class="tr"><input type="text" name="person_title" id="person_title" value="{$person_title}" maxlength="255" class="w400">&nbsp;</td>
+  </tr>  
+  <tr>
+    <td class="tl">SEO关键词：</td>
+    <td class="tr"><input type="text" name="person_keywords" id="person_keywords" value="{$person_keywords}" maxlength="255" class="w400">&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="tl">SEO描述信息：</td>
+    <td class="tr"><input type="text" name="person_description" id="person_description" value="{$person_description}" maxlength="255" class="w400">&nbsp;</td>
+  </tr>	
+  <tr>
+    <td class="tl">来源标识：</td>
+    <td class="tr">
+		<input type="text" name="person_reurl" id="person_reurl" value="{$person_reurl}" maxlength="150" class="w400">
+		</td>
+  </tr>	
+</table>
+<ul class="footer">
+	<input type="submit" name="submit" value="提交"> <input type="reset" name="reset" value="重置">
+</ul>
+</div>
+</form>
+<include file="./Public/system/footer.html" />
+<script type="text/javascript">
+//编辑器调用
+CKEDITOR.replace('person_content',{
+	filebrowserImageUploadUrl : './?g=admin&m=upload&a=ckeditor&sid=star'
+});
+//tabs标签
+$("#tabs>a").click(function(){
+	var no = $(this).attr('id');
+	var n = $("#tabs>a").length;
+	showtab('tabs',no,n);
+	$("#tabs>a").removeClass("on");
+	$(this).addClass("on");
+	return false;
+});
+//扩展分类点击选择
+$(document).on("click", ".select", function(){
+	$id = $(this).attr('data-id');
+	if($id == 'person_type'){
+		$val = $("input[id='"+$id+"']").val();
+		if($val == ''){
+			$val = $(this).text();
+		}else{
+			$val = $val+','+$(this).text();
+			$val = $val.split(',').unique().join(',');
+		}
+		$("input[id='"+$id+"']").val($val);
+	}
+});
+//表单提交
+$("#myform").submit(function(){
+	if($("#person_cid").val()==0){
+		alert('请选择分类');
+		return false;
+	}
+});
+//所属视频
+$('#person_object_name').autocomplete({
+	serviceUrl : './index.php?g=admin&m=vod&a=api',
+	params: {'limit': 10},
+	paramName: 'name',
+	maxHeight: 400,
+	transformResult: function(response) {
+		var obj = $.parseJSON(response);
+		return {
+			suggestions: $.map(obj.data, function(dataItem) {
+				return { value: dataItem.vod_name, id: dataItem.vod_id };
+			})
+		};
+	},
+	onSelect: function (suggestion) {
+		$('#person_object_id').val(suggestion.id);
+	}
+});
+//所属演员
+$('#person_father_name').autocomplete({
+	serviceUrl : './index.php?g=admin&m=star&a=api',
+	params: {'limit': 10},
+	paramName: 'name',
+	maxHeight: 400,
+	transformResult: function(response) {
+		var obj = $.parseJSON(response);
+		return {
+			suggestions: $.map(obj.data, function(dataItem) {
+				return { value: dataItem.person_name, id: dataItem.person_id };
+			})
+		};
+	},
+	onSelect: function (suggestion) {
+		$('#person_father_id').val(suggestion.id);
+	}
+});
+</script>
+</body>
+</html>

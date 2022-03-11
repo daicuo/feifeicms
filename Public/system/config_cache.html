@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>缓存配置</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+<script>
+$(document).ready(function(){
+	<eq name="html_cache_on" value="1">
+	showtab('htmlcache',1,1);
+	</eq>
+});
+</script>
+</head>
+<body class="body">
+<div class="title">
+	<div class="left">缓存参数配置</div>
+</div>
+<div class="add">
+  <form action="?s=Admin-Config-Update-type-cache" method="post" name="myform" id="myform">
+  <ul><li class="left">全站循环标签：</li>
+  <li class="right"><input type="text" name="config[cache_foreach]" id="cache_foreach" maxlength="8" value="{$cache_foreach|intval}" class="w120"><label>推荐开启，模板中循环标签统一的缓存时间，建议设置为600秒，设为0该模块将不启用</label></li>
+  </ul>
+  <ul><li class="left">页面.分类页：</li>
+  <li class="right"><input type="text" name="config[cache_page_list]" id="cache_page_list" maxlength="8" value="{$cache_page_list|intval}" class="w120"><label>推荐开启，建议设置为86400秒，设为0该模块将不启用</label></li>
+  </ul>
+  <ul><li class="left">页面.筛选页：</li>
+  <li class="right"><input type="text" name="config[cache_page_type]" id="cache_page_type" maxlength="8" value="{$cache_page_type|intval}" class="w120"><label>推荐开启，建议设置为86400秒，设为0该模块将不启用</label></li>
+  </ul>          
+  <ul><li class="left">页面.详情页（视频）：</li>
+  <li class="right"><input type="text" name="config[cache_page_vod]" id="cache_page_vod" maxlength="8" value="{$cache_page_vod|intval}" class="w120"><label>推荐开启，建议设置为86400秒，设为0该模块将不启用</label></li>
+  </ul> 
+  <ul><li class="left">页面.详情页（文章）：</li>
+  <li class="right"><input type="text" name="config[cache_page_news]" id="cache_page_news" maxlength="8" value="{$cache_page_news|intval}" class="w120"><label>推荐开启，建议设置为86400秒，设为0该模块将不启用</label></li>
+  </ul>
+  <ul><li class="left">页面.详情页（专题）：</li>
+  <li class="right"><input type="text" name="config[cache_page_special]" id="cache_page_special" maxlength="8" value="{$cache_page_special|intval}" class="w120"><label>推荐开启，建议设置为86400秒，设为0该模块将不启用</label></li>
+  </ul>
+  <ul><li class="left">页面.详情页（讨论）：</li>
+  <li class="right"><input type="text" name="config[cache_page_forum]" id="cache_page_cm" maxlength="8" value="{$cache_page_forum|intval}" class="w120"><label>推荐开启，建议设置为86400秒，设为0该模块将不启用</label></li>
+  </ul>
+  <ul><li class="left">页面.详情页（人物）：</li>
+  <li class="right"><input type="text" name="config[cache_page_person]" id="cache_page_person" maxlength="8" value="{$cache_page_person|intval}" class="w120"><label>推荐开启，建议设置为86400秒，设为0该模块将不启用</label></li>
+  </ul>	
+  <ul><li class="left">页面.详情页（用户）：</li>
+  <li class="right"><input type="text" name="config[cache_page_user]" id="cache_page_user" maxlength="8" value="{$cache_page_user|intval}" class="w120"><label>推荐开启，建议设置为86400秒，设为0该模块将不启用</label></li>
+  </ul>
+	<ul><li class="left">页面.详情页（去防盗链）：</li>
+  <li class="right"><input type="text" name="config[cache_page_images]" id="cache_page_images" maxlength="8" value="{$cache_page_images|intval}" class="w120"><label>推荐开启，建议设置为86400秒，设为0该模块将不启用</label></li>
+  </ul>
+  <ul><li class="left">数据缓存方式：</li>
+  <li class="right"><select name="config[data_cache_type]" class="w128"><option value="file">File 文件</option><option value="memcache" <eq name="data_cache_type" value="memcache">selected</eq>>Memcache</option></select> <label>推荐使用Memcache组件，如果无条件的情况下才选择File文件缓存方式</label></li>
+  </ul>
+  <ul><li class="left">模板缓存功能：</li>
+  <li class="right"><select name="config[tmpl_cache_on]" class="w128"><option value="1">开启</option><option value="0" <eq name="tmpl_cache_on" value="0">selected</eq>>关闭</option></select> <label>开启后将加快模板渲染时间，修改模板后需要清理系统缓存</label></li>
+  </ul>
+  <ul><li class="left">网页缓存功能：</li>
+  <li class="right"><select name="config[html_cache_on]" class="w128" onChange="showtab('htmlcache',this.value,1);"><option value="1">开启</option><option value="0" <eq name="html_cache_on" value="0">selected</eq>>关闭</option></select> <label>系统根据URL自动生成对应的HTML缓存文件（非常占用空间，如有启用移动端子域名此功能一定不要开启）</label></li>
+  </ul>
+  <div id="htmlcache1" style="display:none">
+  <ul><li class="left">首页缓存有效期：</li>
+  <li class="right"><input type="text" name="config[html_cache_index]" id="html_cache_index" maxlength="3" value="{$html_cache_index}" class="w120"><label>设为0该模块将不启用缓存,可以为小数,单位小时</label></li>
+  </ul>
+  <ul><li class="left">筛选页缓存有效期：</li>
+  <li class="right"><input type="text" name="config[html_cache_type]" id="html_cache_type" maxlength="3" value="{$html_cache_type}" class="w120"><label>设为0该模块将不启用缓存,可以为小数,单位小时</label></li>
+  </ul>   
+  <ul><li class="left">分类页缓存有效期：</li>
+  <li class="right"><input type="text" name="config[html_cache_list]" id="html_cache_list" maxlength="3" value="{$html_cache_list}" class="w120"><label>设为0该模块将不启用缓存,可以为小数,单位小时</label></li>
+  </ul>
+  <ul><li class="left">内容页缓存有效期：</li>
+  <li class="right"><input type="text" name="config[html_cache_content]" id="html_cache_content" maxlength="3" value="{$html_cache_content}" class="w120"><label>设为0该模块将不启用缓存,可以为小数,单位小时</label></li>
+  </ul>
+  <ul><li class="left">播放页缓存有效期：</li>
+  <li class="right"><input type="text" name="config[html_cache_play]" id="html_cache_play" maxlength="3" value="{$html_cache_play}" class="w120"><label>设为0该模块将不启用缓存,可以为小数,单位小时</label></li>
+  </ul>
+  <ul><li class="left">其它缓存有效期：</li>
+  <li class="right"><input type="text" name="config[html_cache_ajax]" id="html_cache_ajax" maxlength="3" value="{$html_cache_ajax}" class="w120"><label>设为0该模块将不启用缓存,可以为小数,单位小时</label></li>
+  </ul>
+  </div>
+  <ul class="footer">
+    <input type="submit" name="submit" value="提交"> <input type="reset" name="reset" value="重置">
+  </ul>
+  </form>
+</div>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

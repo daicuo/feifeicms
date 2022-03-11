@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>后台用户管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+<style>
+label{ color:#666}
+label span{ color: #03F}
+.tips{ color:#666}
+.tips strong{ color:red}
+</style>
+</head>
+<body class="body">
+<form action="?s=Admin-Html-Maps" method="post" name="myform" id="myform" target="html">
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<thead>
+<tr>
+<th>
+<div class="fl">静态网页生成选项</div>
+<div class="fl ml-5" id="taskTime"><notempty name="jumpurl" value=""><a href="{$jumpurl}" style="font-weight:bold;color:#FF0000">上一次有生成静态网任务未完成，是否接着生成?</a></notempty></div>
+<div class="fl ml-5"><iframe name="html"id="html" width="100%" height="25" scrolling="no" frameborder="0" style="margin-top:-2px;"></iframe></div>
+</th>
+</thead>
+<tr>
+  <td class="tr">网 站 首 页：
+	<input type="button" value="生成" class="submit" onClick="post('?s=Admin-Create-Index');" {$url_html}/>
+	<label id="indexTips"></label>
+  </td>
+</tr>
+<tr>
+  <td class="tr">网站列表页：
+	<select name="categoryid" id="categoryid" style="width:100px"><option value="">全部分类</option><volist name=":ff_mysql_list('limit:0;order:list_pid asc,list_oid;sort:asc')" id="feifei"><option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$list_id">selected</eq>>{$feifei.list_name}</option><volist name="feifei.list_son" id="feifeison"><option value="{$feifeison.list_id}" <eq name="feifeison.list_id" value="$list_id">selected</eq>>├ {$feifeison.list_name}</option></volist></volist></select>
+	<input type="button" value="生成" class="submit" id="category" onClick="post('?s=Admin-Create-Category');" {$url_html}/>
+	<input type="button" value="暂停" class="submit" id="categoryStop" style="display:none" onClick="post('?s=Admin-Create-Categorystop');" {$url_html}/>
+	<label id="categoryTips"></label>
+  </td>
+</tr>
+<tr>
+<td class="tr">视频内容页：
+	<select name="vodcid" id="vodcid" style="width:100px"><option value="">全部分类</option><volist name=":ff_mysql_list('sid:1;limit:0;order:list_pid asc,list_oid;sort:asc')" id="feifei"><option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$list_id">selected</eq>>{$feifei.list_name}</option><volist name="feifei.list_son" id="feifeison"><option value="{$feifeison.list_id}" <eq name="feifeison.list_id" value="$list_id">selected</eq>>├ {$feifeison.list_name}</option></volist></volist></select>
+	<label><input type="text" name="vodhour" id="vodhour" maxlength="10" class="w100 ct" placeholder="小时内"></label>
+	<input type="button" value="生成" id="vod" class="submit"  onClick="post('?s=Admin-Create-Vod');" {$url_vod_detail}/>
+	<input type="button" value="暂停" class="submit" id="vodStop" style="display:none" onClick="post('?s=Admin-Create-Vodstop');" {$url_html}/>
+	<label id="vodTips">自动分析是否需要生成播放页</label>
+	</td>
+</tr>
+<tr>
+<td class="tr">文章内容页：
+	<select name="newscid" id="newscid" style="width:100px"><option value="">全部分类</option><volist name=":ff_mysql_list('sid:2;limit:0;order:list_pid asc,list_oid;sort:asc')" id="feifei"><option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$list_id">selected</eq>>{$feifei.list_name}</option><volist name="feifei.list_son" id="feifeison"><option value="{$feifeison.list_id}" <eq name="feifeison.list_id" value="$list_id">selected</eq>>├ {$feifeison.list_name}</option></volist></volist></select>
+	<label><input type="text" name="newshour" id="newshour" maxlength="10" class="w100 ct" placeholder="小时内"></label>
+	<input type="button" value="生成" id="news" class="submit"  onClick="post('?s=Admin-Create-News');" {$url_news_detail}/>
+	<input type="button" value="暂停" class="submit" id="newsStop" style="display:none" onClick="post('?s=Admin-Create-Newsstop');" {$url_html}/>
+	<label id="newsTips"></label>
+	</td>
+</tr>
+<tr>
+  <td class="tr" style="height:60px;">
+	<input type="button" value="生成当天视频" class="submit" onClick="post('?s=Admin-Create-Vod-vodhour-24');" {$url_html}/>
+	<input type="button" value="生成当天文章" class="submit" onClick="post('?s=Admin-Create-News-newshour-24');" {$url_html}/>
+	<input type="button" value="一键生成全站" class="submit" onClick="createAll();" {$url_html}/>
+	<input type="button" value="清除所有任务" class="submit" onClick="post('?s=Admin-Create-Clear');" {$url_html}/>
+	<input type="button" value="定时自动生成" class="submit" onClick="location.href='?s=Admin-Cj-Win';" {$url_html}/>
+  </td>
+</tr>
+<tr>
+  <td class="tr tips">
+		<p><strong>提示1：</strong>对应的生成任务将在后台运行、您可以同时生成多个、<strong>超时</strong>引起的暂停请继续生成即可</p>
+		<p><strong>提示2：</strong>生成内容页时根据需求可加上时间限制条件，如：24小时、168小时、留空则不限制</p>
+  </td>
+</tr>
+</table>
+</form>
+<script>
+var createAll = function(){
+	$('#indexTips').html('<iframe src="?g=admin&m=create&a=index" width="100%" height="25" scrolling="no" frameborder="0"></iframe>');
+	$('#categoryTips').html('<iframe src="?g=admin&m=create&a=category" width="100%" height="25" scrolling="no" frameborder="0"></iframe>');
+	$('#vodTips').html('<iframe src="?g=admin&m=create&a=vod" width="100%" height="25" scrolling="no" frameborder="0"></iframe>');
+	$('#newsTips').html('<iframe src="?g=admin&m=create&a=news" width="100%" height="25" scrolling="no" frameborder="0"></iframe>');
+	setTimeout(function(){
+		$('#indexTips').hide();
+	},3000);
+	return false;
+}
+var createTask = function(){
+	$('#html').attr('src','');
+	$('#taskTime').html(new Date().toLocaleString());
+	$.ajax({
+		type: "get",
+		async: false,
+		url: "?g=admin&m=create&a=goon",
+		dataType: "json",
+		timeout: 1000,
+		success: function(json){
+			/*list*/
+			$html = '状态（<span>'+json.category.status+'）</span>';
+			$html+= '页码（<span>'+json.category.goon.nextPage+'</span>）';
+			$html+= '次序（<span>'+(json.category.goon.nextKey*1+1)+'</span>）';
+			$html+= '分类（<span>'+json.category.goon.nextCid+'</span>）';
+			$('#categoryTips').html($html);
+			if(json.category.status == 'ing'){
+				$('#category').hide();
+				$('#categoryStop').show();
+				$('#categoryTips').html($('#categoryTips').html().replace('ing','生成中'));
+			}else if(json.category.status == 'stop'){
+				$('#category').val('继续').show()
+				$('#categoryStop').hide();
+				$('#categoryTips').html($('#categoryTips').html().replace('stop','暂停中'));
+			}else{
+				$('#category').val('生成').show();
+				$('#categoryStop').hide();
+				$('#categoryTips').html('')
+			}
+			/*vod*/
+			$html = '状态（<span>'+json.vod.status+'</span>）';
+			$html+= '次序（<span>'+(json.vod.goon.nextKey*1+1)+'</span>）';
+			$html+= '页码（<span>'+json.vod.goon.nextPage+'/'+json.vod.goon.totalPages+'</span>）';
+			$html+= '分类（<span>'+json.vod.goon.nextCid+'</span>）';
+			$html+= '时间（<span>'+json.vod.goon.nextHour+'</span>）';
+			$html+= '<span><a href="?g=admin&m=vod&a=show&order=id&sort=desc&limit=30&cid='+json.vod.goon.nextCid+'&p='+json.vod.goon.nextPage+'">详情</a>';
+			$('#vodTips').html($html);
+			if(json.vod.status == 'ing'){
+				$('#vod').hide();
+				$('#vodStop').show();
+				$('#vodTips').html($('#vodTips').html().replace('ing','生成中'));
+			}else if(json.vod.status == 'stop'){
+				$('#vod').val('继续').show();
+				$('#vodStop').hide();
+				$('#vodTips').html($('#vodTips').html().replace('stop','暂停中'));
+			}else{
+				$('#vod').val('生成').show();
+				$('#vodStop').hide();
+				$('#vodTips').html('');
+			}
+			/*news*/
+			$html = '状态（<span>'+json.news.status+'</span>）';
+			$html+= '次序（<span>'+(json.news.goon.nextKey*1+1)+'</span>）';
+			$html+= '页码（<span>'+json.news.goon.nextPage+'/'+json.news.goon.totalPages+'</span>）';
+			$html+= '分类（<span>'+json.news.goon.nextCid+'</span>）';
+			$html+= '时间（<span>'+json.news.goon.nextHour+'</span>）';
+			$('#newsTips').html($html);
+			if(json.news.status == 'ing'){
+				$('#news').hide();
+				$('#newsStop').show();
+				$('#newsTips').html($('#newsTips').html().replace('ing','生成中'));
+			}else if(json.news.status == 'stop'){
+				$('#news').val('继续').show();
+				$('#newsStop').hide();
+				$('#newsTips').html($('#newsTips').html().replace('stop','暂停中'));
+			}else{
+				$('#news').val('生成').show();
+				$('#newsStop').hide();
+				$('#newsTips').html('');
+			}			
+		}
+	});
+}
+createTask();
+setInterval('createTask()',3000);
+</script>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

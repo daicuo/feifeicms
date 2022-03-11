@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>幻灯管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$feifeicms.show.table();		
+});
+</script>
+</head>
+<body class="body">
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<thead>
+<tr>
+<th colspan="4" class="r"><span style="float:left">轮播贴片管理</span><span style="float:right"><a href="?s=Admin-Slide-Add">添加轮播贴片</a></span></th>
+</tr>
+</thead>
+<tbody> 
+<volist name="list_slide" id="feifei">
+<tr>
+  <td class="l ct" width="280" style="padding:10px 0px">
+  	<a href="{$feifei.slide_pic}" target="_blank"><img src="{$feifei.slide_pic|ff_url_img}" width="250px" height="125px" alt="查看原图" style="border:1px solid #CCCCCC;padding:1px;"></a>
+  </td>
+  <td class="l pd" style="color:#333">
+  <h3>{$feifei.slide_name}</h3>
+	<div><a href="{$feifei.slide_url}" target="_blank">{$feifei.slide_url|msubstr=0,60,true}</a></div>
+  <p style="max-width:600px;word-wrap:break-word;white-space: normal;">{$feifei.slide_content}</p>
+  </td>
+  <td class="l ct" width="120"><h4>分类{$feifei.slide_cid}</h4></td>
+  <td class="r ct" width="150"><h3><a href="?s=Admin-Slide-Add-id-{$feifei.slide_id}">修改</a> <a href="?s=Admin-Slide-Del-id-{$feifei.slide_id}" onClick="return confirm('确定删除该幻灯片吗?')" title="点击删除幻灯片">删除</a>  <eq name="feifei.slide_status" value="1"><a href="?s=Admin-Slide-Status-id-{$feifei.slide_id}-sid-2" title="点击隐藏幻灯">点击隐藏</a><else /><a href="?s=Admin-Slide-Status-id-{$feifei.slide_id}-sid-1" title="点击显示幻灯片"><font color="red">点击显示</font></a></eq></h3></td>
+</tr>
+</volist> 
+</tbody>       
+</table>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

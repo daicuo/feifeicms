@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>资源采集管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script src="__PUBLIC__/js/admin.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$feifeicms.show.table();
+});
+</script>
+</head>
+<body class="body ff-cj">
+<div class="title">
+	<div class="left">资源库说明</div>
+</div>
+<div class="add">
+	<div class="left">
+  <notempty name="jumpurl"><p><a href="{$jumpurl}" style="color:#F00" target="_blank">上次有采集任务没有完成，是否接着采集?</a></p></notempty>
+  <p>剧情资源库自3.4版本后、采集影片时不再更新剧情、需要单独采集。</p>
+  <p>剧情资源库采集时检测的依据是优先影片来源标识，无标识的时候根据片名做对应的更新。</p>
+  </div>
+</div>
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<thead>
+<tr><th colspan="6" class="r">
+<span style="float:left">API资源站（用户）列表</span>
+<span style="float:right"><a href="?s=Admin-Cj-Add">添加资源库</a></span>
+</th></tr>
+</thead>
+<volist name="list_cj" id="feifei">
+<tr>
+<td class="r pd">{$i}、</td>
+<td class="r pd"><a href="?s=Admin-Cj-Add-id-{$feifei.cj_id}" class="h"><b>{$feifei.cj_name}</b> {$feifei.cj_url}</a></td>
+<td class="l ct"><a href="?s=Admin-Cj-Apis-cjid-{$feifei.cj_id}-cjtype-6-apikey-{$feifei.cj_appkey}-action-days-xmlurl-{$feifei.cj_url|base64_encode}-h-24" target="_blank">采集当天</a></td>
+<td class="l ct"><a href="?s=Admin-Cj-Apis-cjid-{$feifei.cj_id}-cjtype-6-apikey-{$feifei.cj_appkey}-action-days-xmlurl-{$feifei.cj_url|base64_encode}-h-98" target="_blank">采集本周</a></td>
+<td class="l ct"><a href="?s=Admin-Cj-Apis-cjid-{$feifei.cj_id}-cjtype-6-apikey-{$feifei.cj_appkey}-action-all-xmlurl-{$feifei.cj_url|base64_encode}" target="_blank">采集所有</a></td>
+<td class="r ct"><a href="?s=Admin-Cj-Add-id-{$feifei.cj_id}">修改</a> <a href="?s=Admin-Cj-Del-id-{$feifei.cj_id}" onClick="return confirm('确定删除吗?')" title="点击删除">删除</a></td>
+</tr>
+</volist>
+</table>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>视频管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+</head>
+<body class="body">
+<include file="./Public/system/plus_showpic.html" />
+<include file="./Public/system/plus_bg.html" />
+<include file="./Public/system/plus_createhtml.html" />
+<include file="./Public/system/plus_dialog.html" />
+<table border="0" cellpadding="0" cellspacing="0" class="table select">
+  <thead>
+  <tr>
+    <th colspan="2"><span style="float:left">视频筛选</span>
+    <span class="right"><a href="?s=Admin-Vod-Add" style="float:right">添加视频</a></span>
+    </th>
+  </tr>
+  </thead>
+  <tr>
+    <td class="l pd" width="80">视频搜索：</td>
+    <td class="r pd">
+    <form action="?s=Admin-Vod-Show" method="post">
+    <input type="text" class="w200 wd" name="wd" maxlength="30" value="{$wd|default='片名、主演、导演'|urldecode}" onClick="this.select();">
+    <input type="submit" value="搜索" class="submit">
+    <input type="button" value="展开+" class="submit all" data-id="set">
+    </form>
+    </td>
+  </tr>  
+  <tr>
+    <td class="l pd" width="80">分类筛选：</td>
+    <td class="r pd">
+    <lt name="cid" value="1">
+    	<a class="active" href="?{:http_build_query(array_merge($urls,array('cid'=>'')))}">全部</a>
+    <else/>
+   		<a href="?{:http_build_query(array_merge($urls,array('cid'=>'')))}">全部</a>
+    </lt>
+    <php>$item_list = ff_mysql_list('sid:1;limit:0;order:list_pid asc,list_oid;sort:asc');</php>
+    <volist name="item_list" id="feifei">
+      <eq name="feifei.list_id" value="$cid">
+      <a class="active" href="?{:http_build_query(array_merge($urls,array('cid'=>$feifei['list_id'])))}">{$feifei.list_name}</a>
+      <else/>
+      <a href="?{:http_build_query(array_merge($urls,array('cid'=>$feifei['list_id'])))}">{$feifei.list_name}</a>
+      </eq>
+    </volist>
+    <br />
+    <!--二级分类展示 -->
+    <volist name="item_list" id="feifei">
+      <volist name="feifei['list_son']" id="feifeison">
+      <eq name="feifeison.list_id" value="$cid">
+      <a class="active list-{$feifeison.list_id} list-pid-{$feifeison.list_pid}" data-pid="{$feifeison.list_pid}" href="?{:http_build_query(array_merge($urls,array('cid'=>$feifeison['list_id'])))}">├ {$feifeison.list_name}</a>
+      <else/>
+      <a class="list-son list-{$feifeison.list_id} list-pid-{$feifeison.list_pid}" data-pid="{$feifeison.list_pid}" href="?{:http_build_query(array_merge($urls,array('cid'=>$feifeison['list_id'])))}">├ {$feifeison.list_name}</a>
+      </eq>
+      </volist>
+    </volist>
+    </td>
+  </tr>
+  <tr>
+    <td class="l pd" width="80">扩展分类：</td>
+    <td class="r pd">
+    <a id="tags-{:md5(1)}" href="?{:http_build_query(array_merge($urls,array('tag_name'=>'','tag_list'=>'')))}">全部</a>
+    <lt name="cid" value="1">
+      <volist name=":explode(',',C('play_type'))" id="val">
+      <a id="tags-{:md5($val)}" href="?{:http_build_query(array_merge($urls,array('tag_name'=>$val,'tag_list'=>'vod_type')))}">{$val}</a>
+      </volist>
+    <else/>
+    	<php>$json_extend = ff_list_find($cid, 'list_extend');</php>
+      <volist name=":explode(',',$json_extend['type'])" id="val">
+      <a id="tags-{:md5($val)}" href="?{:http_build_query(array_merge($urls,array('tag_name'=>$val,'tag_list'=>'vod_type')))}">{$val}</a>
+      </volist>
+    </lt>
+    </td>
+  </tr>
+  <tr>
+    <td class="l pd" width="80">连载状态：</td>
+    <td class="r pd">
+    <a id="isend-" href="?{:http_build_query(array_merge($urls,array('isend'=>null)))}">全部</a>
+    <a id="isend-false" href="?{:http_build_query(array_merge($urls,array('isend'=>'false')))}">连载中</a>
+    <a id="isend-true" href="?{:http_build_query(array_merge($urls,array('isend'=>'true')))}">已完结</a>
+    </td>
+  </tr>	
+  <tr>
+    <td class="l pd" width="80">审核状态：</td>
+    <td class="r pd">
+    <a id="status-" href="?{:http_build_query(array_merge($urls,array('status'=>null)))}">全部</a>
+    <a id="status-0" href="?{:http_build_query(array_merge($urls,array('status'=>0)))}">未审核</a>
+		<a id="status-1" href="?{:http_build_query(array_merge($urls,array('status'=>1)))}">已审核</a>
+    <a id="status--1" href="?{:http_build_query(array_merge($urls,array('status'=>-1)))}">待验证</a>
+    </td>
+  </tr>
+  <tr>
+    <td class="l pd" width="80">权重状态：</td>
+    <td class="r pd">
+    <a id="stars-" href="?{:http_build_query(array_merge($urls,array('stars'=>'')))}">全部</a>
+    <a id="stars-1" href="?{:http_build_query(array_merge($urls,array('stars'=>1)))}">一星</a>
+    <a id="stars-2" href="?{:http_build_query(array_merge($urls,array('stars'=>2)))}">二星</a>
+    <a id="stars-3" href="?{:http_build_query(array_merge($urls,array('stars'=>3)))}">三星</a>
+    <a id="stars-4" href="?{:http_build_query(array_merge($urls,array('stars'=>4)))}">四星</a>
+    <a id="stars-5" href="?{:http_build_query(array_merge($urls,array('stars'=>5)))}">五星</a>
+    </td>
+  </tr>	 
+  <tr>
+    <td class="l pd" width="80">更新周期：</td>
+    <td class="r pd">
+    <empty name="weekday">
+    <a class="active" href="?{:http_build_query(array_merge($urls,array('weekday'=>'')))}">全部</a>
+    <else/>
+    <a href="?{:http_build_query(array_merge($urls,array('weekday'=>'')))}">全部</a>
+    </empty>
+    <volist name=":explode(',',C('play_weekday'))" id="feifei" >
+    <eq name="feifei" value="$weekday">
+    <a class="active" href="?{:http_build_query(array_merge($urls,array('weekday'=>$feifei)))}">{$feifei}</a>
+    <else/>
+    <a href="?{:http_build_query(array_merge($urls,array('weekday'=>$feifei)))}">{$feifei}</a>
+    </eq>
+    </volist>
+    </td>
+  </tr>   
+  <tr>
+    <td class="l pd" width="80">视频版本：</td>
+    <td class="r pd">
+    <empty name="state">
+    <a class="active" href="?{:http_build_query(array_merge($urls,array('state'=>'')))}">全部</a>
+    <else/>
+    <a href="?{:http_build_query(array_merge($urls,array('state'=>'')))}">全部</a>
+    </empty>
+    <volist name=":explode(',',C('play_state'))" id="feifei" >
+    <eq name="feifei" value="$state">
+    <a class="active" href="?{:http_build_query(array_merge($urls,array('state'=>$feifei)))}">{$feifei}</a>
+    <else/>
+    <a href="?{:http_build_query(array_merge($urls,array('state'=>$feifei)))}">{$feifei}</a>
+    </eq>
+    </volist>
+    </td>
+  </tr>
+  <tr>
+    <td class="l pd" width="80">出产地区：</td>
+    <td class="r pd">
+    <empty name="area">
+    <a class="active" href="?{:http_build_query(array_merge($urls,array('area'=>'')))}">全部</a>
+    <else/>
+    <a href="?{:http_build_query(array_merge($urls,array('area'=>'')))}">全部</a>
+    </empty>
+    <volist name=":explode(',',C('play_area'))" id="feifei" >
+    <eq name="feifei" value="$area">
+    <a class="active" href="?{:http_build_query(array_merge($urls,array('area'=>$feifei)))}">{$feifei}</a>
+    <else/>
+    <a href="?{:http_build_query(array_merge($urls,array('area'=>$feifei)))}">{$feifei}</a>
+    </eq>
+    </volist>
+    </td>
+  </tr>
+  <tr>
+    <td class="l pd" width="80">播放来源：</td>
+    <td class="r pd">
+    <empty name="play">
+    <a class="active" href="?{:http_build_query(array_merge($urls,array('play'=>'')))}">全部</a>
+    <else/>
+    <a href="?{:http_build_query(array_merge($urls,array('play'=>'')))}">全部</a>
+    </empty>
+    <volist name=":F('_feifeicms/player')" id="feifei" >
+    <eq name="key" value="$play">
+    <a class="active" href="?{:http_build_query(array_merge($urls,array('play'=>$key)))}">{$feifei[0]}</a>
+    <else/>
+    <a href="?{:http_build_query(array_merge($urls,array('play'=>$key)))}">{$feifei[0]}</a>
+    </eq>
+    </volist>
+    </td>
+  </tr>   
+  <tr>
+    <td class="l pd" width="80">排序类型：</td>
+    <td class="r pd">
+    <a id="order-hits" href="?{:http_build_query(array_merge($urls,array('order'=>'hits')))}">按人气</a>
+    <a id="order-gold" href="?{:http_build_query(array_merge($urls,array('order'=>'gold')))}">按评分</a>
+    <a id="order-stars" href="?{:http_build_query(array_merge($urls,array('order'=>'stars')))}">按权重</a>
+    <a id="order-id" href="?{:http_build_query(array_merge($urls,array('order'=>'id')))}">按入库ID</a>
+    <a id="order-addtime" href="?{:http_build_query(array_merge($urls,array('order'=>'addtime')))}">按更新时间</a>
+    </td>
+  </tr>
+  <tr>
+    <td class="l pd" width="80">排序方式：</td>
+    <td class="r pd">
+    <a id="sort-asc" href="?{:http_build_query(array_merge($urls,array('sort'=>'asc')))}">升序</a>
+    <a id="sort-desc" href="?{:http_build_query(array_merge($urls,array('sort'=>'desc')))}">倒序</a>
+    </td>
+  </tr>
+</table>
+<form action="?s=Admin-Vod-Show" method="post" name="myform" id="myform">
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+  <thead>
+    <tr class="ct">
+      <th class="l pd"><span style="float:left">ID<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'id')))}" data-order="id" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></span>视频名称 服务器组</th>
+			<th class="l" width="80">权重<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'stars')))}" data-order="stars" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="l" width="60">人气<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'hits')))}" data-order="hits" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="l" width="60">评分<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'gold')))}" data-order="gold" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="l" width="80">时间<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'addtime')))}" data-order="addtime" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+			<th class="l" width="70">影币/权限</th>
+      <th class="r" width="180">相关操作</th>
+    </tr>
+  </thead>
+  <volist name="list" id="feifei">
+  <tbody>
+  <tr>
+    <td class="l pd">
+    <label class="fl ids_check"><input name='ids[]' type='checkbox' value='{$feifei.vod_id}' class="noborder"></label>
+    <label class="fl ids_show">{$feifei.vod_id}</label>
+    <label class="fl">『<a href="{$feifei.list_url}">{$feifei.list_name}</a>』
+		<a href="{$feifei.vod_url}" onMouseOver="showpic(event,'{$feifei.vod_pic}','{&upload_path}/');" onMouseOut="hiddenpic();" target="_blank">{$feifei.vod_name}<eq name="feifei.vod_isend" value="1"><gt name="feifei.vod_total" value="0">（全）</gt></eq></a>
+    </label>
+    <label class="vod-isend fl" id="isend-{$feifei.vod_id}">
+    <sup data-id="{$feifei.vod_id}" data-continu="{$feifei.vod_continu}">{$feifei.vod_continu|default='<img src="__PUBLIC__/images/admin/ct.gif">'}</sup>
+    </label>
+    <label class="fr vod_play">{$feifei.vod_play|str_replace='$$$',' ',###}</label>
+    </td>
+		<td class="l ct"><img class="navpoint star_no_{$feifei.vod_stars}" id="star_{$feifei.vod_id}_0" src="__PUBLIC__/images/admin/starno.gif" onClick="setstars('Vod',{$feifei.vod_id},0);"><volist name="feifei['list_stars']" id="ajaxstar"><img src="__PUBLIC__/images/admin/star{$ajaxstar}.gif" onClick="setstars('Vod',{$feifei.vod_id},{$i});" id="star_{$feifei.vod_id}_{$i}" class="navpoint"></volist></td>
+    <td class="l ct">{$feifei.vod_hits}</td>
+    <td class="l ct">{$feifei.vod_gold}</td>
+    <td class="l ct">{$feifei.vod_addtime|date='Y.m.d',###}</td>
+		<td class="l ct">（{$feifei.vod_price}）<eq name="feifei.vod_ispay" value="1">VIP<else/>免费</eq></td>
+    <td class="r ct">
+		<a href="?s=Admin-Role-Show-object_id-{$feifei.vod_id}">角色</a>
+    <a href="?s=Admin-Vod-Add-cid-{$feifei.vod_cid}-id-{$feifei.vod_id}" title="点击修改影片">编辑</a>
+    <eq name="feifei.vod_status" value="1"><a href="?s=Admin-Vod-Status-id-{$feifei.vod_id}-value-0" title="点击隐藏影片">隐藏</a><else /><a href="?s=Admin-Vod-Status-id-{$feifei.vod_id}-value-1" title="点击显示影片"><font color="red">显示</font></a></eq>
+		<neq name="feifei.vod_inputer" value="feifeicms"><a href="?s=Admin-Vod-Inputer-id-{$feifei.vod_id}-value-feifeicms" title="点击锁定后采集的时候将不更新">锁定</a><else /><a href="?s=Admin-Vod-Inputer-id-{$feifei.vod_id}-value-" title="点击解锁"><font color="red">解锁</font></a></neq>
+		<a href="?s=Admin-Vod-Del-id-{$feifei.vod_id}" onClick="return confirm('确定删除该视频吗?')" title="点击删除影片">删除</a>
+		<a class="create{$Think.config.url_html}" data-model="vod" data-id="{$feifei.vod_id}" href="javascript:;">生成</a>
+    </td>
+  </tr>
+  </tbody>
+  </volist>
+  <tr>
+    <td colspan="7" class="r pages">{$pages}</td>
+  </tr>   
+  <tfoot>
+    <tr>
+      <td colspan="7" class="r">
+      <input type="button" value="全选" class="submit" onClick="checkall('all');">
+      <input name="" type="button" value="反选" class="submit" onClick="checkall();">
+      <eq name="Think.config.url_html" value="1">
+      <input type="button" value="生成静态" name="createhtml" id="createhtml" class="submit" onClick="post('?s=Admin-Vod-Create');"/>
+      </eq>
+			<input type="button" value="取消审核" class="submit" onClick="post('?s=Admin-Vod-Status-value-0');">
+			<input type="button" value="批量审核" class="submit" onClick="post('?s=Admin-Vod-Status-value-1');">
+      <input type="button" value="批量删除" class="submit" onClick="if(confirm('删除后将无法还原,确定要删除吗?')){post('?s=Admin-Vod-Delall');}else{return false;}">
+      <input type="button" value="批量移动" class="submit" onClick="$('#psetcid').show();"><span style="display:none" id="psetcid">
+      <select name="pestcid">
+      <option value="">选择目标分类</option>
+      <volist name=":ff_mysql_list('sid:1;limit:0;order:list_pid asc,list_oid;sort:asc')" id="feifei">
+      <option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$cid">selected</eq>>{$feifei.list_name}</option>
+      <volist name="feifei['list_son']" id="feifei"><option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$cid">selected</eq>>├ {$feifei.list_name}</option></volist>
+      </volist>
+      </select>
+      <input type="button" class="submit" value="确定转移" onClick="post('?s=Admin-Vod-Pestcid');"/>
+      </span>
+			<input type="button" value="设置系列" class="submit" onClick="$('#postSeries').show();"><span style="display:none" id="postSeries">
+			<input type="text" name="vod_series" maxlength="120" class="w100">
+      <input type="button" class="submit" value="确 定" onClick="post('?s=Admin-Vod-Series');"/>
+      </span></td>
+    </tr>  
+  </tfoot>
+</table>
+</form>
+<include file="./Public/system/footer.html" />
+<script type="text/javascript">
+$feifeicms.show.table();
+$feifeicms.show.isend();
+$feifeicms.show.create();
+$feifeicms.show.collapse('vod','get');
+$feifeicms.show.sort("{$order}");
+//扩展属性
+$('.list-pid-{$cid}').show();
+if($('.list-{$cid}').eq(0).attr('data-pid')){
+	$pid = $('.list-{$cid}').eq(0).attr('data-pid');
+	$('.list-pid-'+$pid).show();
+}
+$('#tags-{$tag_name|default=1|md5}').addClass('active');
+$('#status-{$status}').addClass('active');
+$('#isend-{$isend}').addClass('active');
+$('#stars-{$stars}').addClass('active');
+$('#state-{$state|default=全部|md5}').addClass('active');
+$('#order-{$order}').addClass('active');
+$('#sort-{$sort}').addClass('active');
+</script>
+</body>
+</html>

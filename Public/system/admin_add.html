@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>后台用户管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#myform").submit(function(){
+		if($feifeicms.form.empty('myform','admin_name') == false){
+			return false;
+		}
+		<eq name="admin_id" value="0">
+		if($feifeicms.form.empty('myform','admin_pwd') == false){
+			return false;
+		}
+		if($feifeicms.form.repwd('myform','admin_pwd','admin_repwd') == false){
+			return false;
+		}
+		</eq>		
+	});
+});
+</script>
+</head>
+<body class="body">
+<include file="./Public/system/header.html" />
+<div class="title">
+	<div class="left">添加后台用户管理</div>
+    <div class="right"><a href="?s=Admin-Admin-Show">后台用户管理</a></div>
+</div>
+<div class="add">
+	<gt name="admin_id" value="0">
+    <form action="?s=Admin-Admin-Update" method="post" name="myform" id="myform">
+    <input type="hidden" name="admin_id" value="{$admin_id}"><input type="hidden" name="admin_pwd2" value="{$admin_pwd}">
+    <else/>
+    <form action="?s=Admin-Admin-Insert" method="post" name="myform" id="myform">
+    </gt> 
+    <ul><li class="left">用户名称：</li>
+    	<li class="right"><input type="text" name="admin_name" id="admin_name" value="{$admin_name}" maxlength="12" error="* 用户名长度为2-12个字符!"><span id="admin_name_error">*</span></li>
+    </ul>
+    <ul><li class="left">用户密码：</li>
+    	<li class="right"><input type="password" name="admin_pwd" id="admin_pwd" value="" maxlength="12" error="* 用户密码长度为2-12个字符!"><span id="admin_pwd_error">*</span></li>
+    </ul>
+    <ul><li class="left">确认密码：</li>
+    	<li class="right"><input type="password" name="admin_repwd" id="admin_repwd" value="" maxlength="12" error="* 两次输入的密码不一样!"><span id="admin_repwd_error">*</span></li>
+    </ul>
+    <ul class="footer"><input type="submit" name="submit" value="提交"> <input type="reset" name="reset" value="重置"> <gt name="admin_id" value="0">注：不修改密码请留空</gt></ul>
+    </form>
+</div>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

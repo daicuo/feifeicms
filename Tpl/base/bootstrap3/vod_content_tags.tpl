@@ -1,0 +1,1 @@
+{:ff_url_tags_content(nb(strip_tags($vod_content,"<a>,<p>,<img>,<center>,<b>,<strong>,<pre>,<code>,<ol>,<ul>,<li>,<dl>,<dt>,<dd>,<table>,<caption>,<thead>,<tbody>,<tfoot>,<col>,<colgroup>,<tr>,<th>,<td>")),$Tag)}

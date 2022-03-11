@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SQL执行器</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+</head>
+<body class="body">
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<thead><tr><th class="r">SQL执行器</th></tr></thead>
+<form action="?s=Admin-Data-Upsql" method="post" id="myform" name="myform">
+  <tbody> 
+  <tr>
+  	<td class="r ct" style="padding:10px 0px;"><textarea name="sql" id="sql" type="text" style="height:250px;width:95%;"></textarea></td>
+  </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="2" class="r"><input class="submit" type="submit" name="submit" value="提 交" onClick="return confirm('该操作需要慎重操作,请确定是否执行!')"> <input class="submit" type="reset" name="Input" value="重 置" > <label>除非确定您的SQL语句安全，否则不要轻易在此处运行!</label></td>
+    </tr> 
+    <tr>
+      <td colspan="2" class="r"><span style="color:#FF0000">清空所有数据，并且让ID归0：Truncate table ff_vod</span><br>表的修复与优化：Repair TABLE ff_vod,optimize TABLE ff_vod<br>将'youku'服务器组的视频设为未审核：Update ff_vod Set vod_status=0 Where vod_play='youku'<br>将'youku'服务器组的视频直接删除：Delete From ff_vod Where vod_play='youku'<br>清空视频模型的所有评论：Delete From ff_cm Where cm_sid=1<br />格式化所有完结影片状态：update ff_vod set vod_continu=0 where vod_continu='完结'</td>
+    </tr> 
+  </tfoot> 
+</form>            
+</table>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

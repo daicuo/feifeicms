@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>数据库优化</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+<script>
+$(document).ready(function(){
+	$feifeicms.show.table();
+});
+</script>
+</head>
+<body class="body">
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<form action="?s=Admin-Data-Repair" method="post" id="myform" name="myform">
+  <thead>
+    <tr>
+      <th colspan="7" class="l">数据库修复与优化</th>
+      </tr>
+  </thead>
+  <tbody> 
+  <tr>
+  	<td width="5%" class="l ct">描述</td>
+    <td width="15%" class="l ct">数据表</td>
+		<td width="15%" class="l ct">记录数</td>
+		<td width="15%" class="l ct">数据</td>
+		<td width="15%" class="l ct">索引</td>
+    <td width="15%" class="l ct">碎片</td>
+		<td class="r ct">描述</td>
+  </tr>
+  <volist name="list_table" id="feifei">
+  <tr>
+  	<td class="l ct"><input type="checkbox" name="ids[]" value="{$feifei.table_name}" style='border:none' checked>{$i}、</td>
+    <td class="l ct">{$feifei.table_name}</td>
+		<td class="l ct">{$feifei.table_rows}</td>
+		<td class="l ct">{$feifei.data_length}</td>
+		<td class="l ct">{$feifei.index_length}</td>
+    <td class="l ct">{$feifei.data_free}</td>
+		<td class="r ct">{$feifei.table_name|ff_table_name}</td>
+  </tr>
+  </volist>
+   </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="7" class="r">
+			<input type="button" value="全选" class="submit" onClick="checkall('all');">
+			<input name="" type="button" value="反选" class="submit" onClick="checkall();">
+			<input type="submit" name="submit" value="提交" class="submit">
+			</td>
+    </tr>  
+  </tfoot> 
+</form>            
+</table>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>角色资源库列表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script src="__PUBLIC__/js/admin.js"></script>
+</head>
+<body class="body ff-cj">
+<include file="./Public/system/plus_bg.html" />
+<!--绑定分类表单框-->
+<div id="setbind" style="position:absolute;display:none;background:#efefef;padding:20px;z-index:9;"></div>
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<thead>
+<tr>
+<th class="r">
+	<span style="float:left">
+	分类转换 <notempty name="cid" value="0"><a href="?s=Admin-Cj-Apis-cjid-{$cjid}-cjtype-9-action-show-xmlurl-{$xmlurl}"><font color="red">全部资源</font></a></notempty></span>
+  <span style="float:right"><a href="?s=Admin-Cj-Show-type-9">返回资源库列表</a></span>
+</th>
+</tr>
+</thead>
+<tr>
+<td class="l ct td-bind">
+<volist name="cj_list" id="feifei">
+<li>
+<a href="?g=admin&m=cj&a=apis&cjid={$cjid}&cjtype=9&action=show&xmlurl={$xmlurl}&cid={$feifei.list_id}&wd={$wd}">{$feifei.list_name}（{$feifei.list_id}）</a>
+<a class="cj-bind" href="javascript:;" data-key="{$feifei.bind_key}" data-val="{$feifei.list_id}" id="bind_{$feifei.bind_key}"><if condition="ff_bind_id($feifei['bind_key']) gt 0"><font color="blue">解绑</font><else /><font color="red">绑定</font></if></a>
+</li>
+</volist>
+</td>
+</tr>
+</table>
+<!-- -->
+<form action="?g=admin&m=cj&a=apis&action=ids" method="post" name="myform" id="myform">
+<input name="cjid" type="hidden" value="{$cjid}" />
+<input name="cjtype" type="hidden" value="9" />
+<input name="xmlurl" type="hidden" value="{$xmlurl}" />
+<input name="xmltype" type="hidden" value="{$xmltype}" />
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<thead>
+<tr>
+<th class="r">搜索与操作</th>
+</tr>
+</thead>
+<tr>
+<td class="l pd ct"> 
+	<input type="text" name="wd" id="wd" maxlength="20" value="{$wd|urldecode}" onClick="this.select();" class="w400 pd">
+  <input type="button" name="search" id="search" value="搜索一下" class="submit">
+	<input type="button" value="采集当天" class="submit" id="person-day">
+	<input type="button" value="采集所有" class="submit" id="person-all">
+	<notempty name="cid" value="0">
+	<input type="button" value="采集本类" class="submit" id="person-list">
+	</notempty>
+</td>
+</tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<thead>
+<tr class="ct">
+  <th class="l">人物名字</th>
+  <th class="l" width="100">系统分类</th>
+  <th class="r ct" width="160">更新时间</th>
+</tr>
+</thead>
+<tbody>
+<volist name="cj_data" id="feifei">
+  <tr>
+    <td class="l pd"><input name='ids[]' type='checkbox' value='{$feifei.person_id}' class="noborder">『{$feifei.list_name}』{$feifei.person_name}</td>
+    <td class="l ct"><gt name="feifei.person_cid" value="0"><font color="blue">已转换</font><else /><font color="red">未转换</font></gt></td>
+    <td class="r ct">{$feifei.person_addtime|date='Y-m-d H:i:s',###}</td>
+  </tr>
+</volist>
+</tbody>
+ <tr>
+    <td colspan="3" class="r pages">{$page_list}</td>
+  </tr>   
+<tfoot>
+<tr>
+  <td colspan="3" class="r">
+  <input type="button" value="全选" class="submit" onClick="checkall('all');">
+  <input type="button" value="反选" class="submit" onClick="checkall();">
+  <input type="submit" value="采集选中" class="submit">
+  </td>
+</tr>  
+</tfoot>
+</table>
+</form>
+<!-- -->
+<form action="?g=admin&m=cj&a=apis&action=post" method="post" name="formapi" id="formapi" target="_blank">
+<input name="cjid" type="hidden" value="{$cjid}" />
+<input name="cjtype" type="hidden" value="9" />
+<input name="xmlurl" type="hidden" value="{$xmlurl}" />
+<input name="xmltype" type="hidden" value="{$xmltype}" />
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<thead>
+<tr>
+<th colspan="2" class="r">
+	个性采集
+</th>
+</tr>
+</thead>
+<tr>
+<td class="tl">
+分类ID：
+</td>
+<td class="pd l"><input type="text" name="cid" id="cid" class="w100 ct" maxlength="8" value="{$cid}"> 不限制，请留空</td>
+</tr>
+<tr>
+<td class="tl">
+更新时间：
+</td>
+<td class="pd l"><input type="text" name="h" id="h" class="w100 ct" maxlength="8" value="24"> 单位：小时，不限制时间请留空</td>
+</tr>
+<tr>
+<td class="tl">
+每页采集数量：
+</td>
+<td class="pd l"><input type="text" name="limit" id="limit" class="w100 ct" maxlength="3" value="{$limit|default=50}"> 最大100</td>
+</tr>
+<tr>
+<td class="tl">
+相关操作：
+</td>
+<td class="pd l">
+<input type="submit" value="开始采集" class="submit">
+</td>
+</tr>
+</table>
+</form>
+<script>
+$feifeicms.show.table();
+$('.cj-bind').on('click',function(e){
+	setbind(e, 9, $(this).attr('data-key') ,$(this).attr('data-val'));
+});
+$('#search').on('click',function(){
+	$('#myform').attr('action','?g=admin&m=cj&a=apis&action=show');
+	$('#myform').submit();
+});
+$('#person-day').on('click',function(){
+	$("input[name='ids[]']").each(function(){
+		this.checked = false;
+	});
+	$('#myform').attr('action','?g=admin&m=cj&a=apis&action=days&h=24');
+	$('#myform').submit();
+});
+$('#person-list').on('click',function(){
+	$("input[name='ids[]']").each(function(){
+		this.checked = false;
+	});
+	$('#myform').attr('action','?g=admin&m=cj&a=apis&action=all&cid={$cid}');
+	$('#myform').submit();
+});
+$('#person-all').on('click',function(){
+	$("input[name='ids[]']").each(function(){
+		this.checked = false;
+	});
+	$('#myform').attr('action','?g=admin&m=cj&a=apis&action=all');
+	$('#myform').submit();
+});
+</script>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

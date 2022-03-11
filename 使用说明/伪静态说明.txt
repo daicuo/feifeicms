@@ -1,0 +1,25 @@
+1、确认空间支持rewrite组件并完成配置，以下为各用WebServer对应的模块。
+	[ Apache ]
+		httpd.conf配置文件中加载了mod_rewrite.so模块 
+		AllowOverride None 将None改为 All 
+		.htaccess文件放到index.php的同级目录
+	
+	[ IIS6.x ]
+		支持ISAPI_Rewrite的话，可以配置httpd.ini文件
+		httpd.ini文件放到index.php的同级目录
+		
+	[ IIS7.x ]
+		web.Config文件放到index.php的同级目录或在中间添加rewrite节点
+	
+	[ Nginx ]
+		将web.conf里面的代码复制到你的网站配置的 location /{.....}中间 重启nginx即可
+		
+		
+2、网站后台》系统》URL优化：开启重写功能。
+
+
+3、根据需要自己个性化URL规则（可选）
+
+
+备注：
+	 默认规则及详细文档请参考以下文档如下，http://daicuo.co/forum-175-1-1.html

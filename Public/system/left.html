@@ -1,0 +1,156 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Left</title>
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-left.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("a").click(function(){
+		$("a").removeClass("on"); 
+		$(this).addClass("on");
+		$(this).blur();
+	});
+});
+</script>
+<base target="right">
+</head>
+<body class="body">
+<table width="140" height="100%" border="0" cellpadding="0" cellspacing="0">
+<tr><td valign="top" class="left">
+<div id="menu0" style="display:block">
+<a href="?s=Admin-Config-Base" class="on">全局配置</a>
+<a href="?s=Admin-Config-Rewrite">URL优化</a>
+<a href="?s=Admin-Config-Pay">付费点播</a>
+<a href="?s=Admin-Player-Show">播放来源</a>
+<a href="?s=Admin-Config-Model">内容设置</a>
+<a href="?s=Admin-Config-Cache">缓存设置</a>
+<a href="?s=Admin-Config-Caiji">采集设置</a>
+<a href="?s=Admin-Config-File">附件设置</a>
+<a href="?s=Admin-Config-Email">邮件设置</a>
+<a href="?s=Admin-Config-Register">注册设置</a>
+<a href="?s=Admin-Config-User">评论设置</a>
+<a href="?s=Admin-Config-Weixin">微信设置</a>
+<a href="?s=Admin-Index-Right">运行环境</a>
+</div>
+<div id="menu1" style="display:none">
+<a href="?s=Admin-Cache-Show" class="on">缓存管理</a>
+<a href="?s=Admin-Pic-Tool">附件管理</a>
+<a href="?s=Admin-Tpl-Show">模板管理</a>
+<a href="?s=Admin-Tool-Name">同名检测</a>
+<a href="?s=Admin-Tool-Batch">批量维护</a>
+<a href="?s=Admin-Create-Show">静态生成</a>
+<a href="?s=Admin-Crontab-Index">计划任务</a>
+</div>
+<div id="menu2" style="display:none">
+<a href="?s=Admin-Nav-Show" class="on">导航管理</a>
+<a href="?s=Admin-Nav-Add">添加导航</a> 
+</div>
+<div id="menu3" style="display:none">
+<a href="?s=Admin-List-Show" class="on">分类管理</a>
+<a href="?s=Admin-List-Add">添加分类</a>
+</div>
+<div id="menu4" style="display:none">
+<a href="?s=Admin-Cj-Add">添加资源库</a>
+<a href="?s=Admin-Cj-Show-type-1" class="on">视频资源库</a>
+<a href="?s=Admin-Cj-Show-type-2">文章资源库</a>
+<!--<a href="?s=Admin-Cj-Show-type-3">专题资源库</a> -->
+<a href="?s=Admin-Cj-Show-type-4">用户资源库</a>
+<a href="?s=Admin-Cj-Show-type-5">评论资源库</a>
+<a href="?s=Admin-Cj-Show-type-6">剧情资源库</a>
+<a href="?s=Admin-Cj-Show-type-8">明星资源库</a>
+<a href="?s=Admin-Cj-Show-type-9">角色资源库</a>
+<a href="?s=Admin-Cj-Win">定时自动采集</a>
+<a href="//cdn.feifeicms.co/server/v3/jump.php?id=1&version={%feifeicms_version}" style="color:#F00" target="_blank">搜索资源库</a>
+</div>
+<div id="menu5" style="display:none">
+<a href="?s=Admin-Vod-Show" class="on">视频管理</a>
+<a href="?s=Admin-Vod-Add">添加视频</a>
+<a href="?s=Admin-Vod-Show-inputer-feifeicms" class="line">已锁定视频</a>
+<a href="?s=Admin-Vod-Show-url-false" class="line">无播放地址</a>
+<a href="?s=Admin-Vod-Show-scenario-true" class="line">有分集剧情</a>
+<a href="?s=Admin-Vod-Show-lines-true" class="line">有经典台词</a>
+<a href="?s=Admin-Vod-Show-douban-true" class="line">有豆瓣编号</a>
+<a href="?s=Admin-Vod-Show-ispay-true" class="line">需VIP权限</a>
+<a href="?s=Admin-Vod-Show-price-true" class="line">需支付影币</a>
+<a href="?s=Admin-Vod-Show-trysee-true" class="line">可试看影片</a>
+<a href="?s=Admin-Vod-Show-series-true" class="line">有系列影片</a>
+<a href="?s=Admin-Vod-Show-pic-false" class="line">无封面视频</a>
+<a href="?s=Admin-Tool-Name" class="line">重复片名检测</a>
+</div>
+<div id="menu6" style="display:none">
+<a href="?s=Admin-News-Show" class="on">文章管理</a>
+<a href="?s=Admin-News-Add">添加文章</a>
+</div>
+<div id="menu7" style="display:none">
+<a href="?s=Admin-Special-Show" class="on">专题管理</a>
+<a href="?s=Admin-Special-Add">添加专题</a>
+<a href="?s=Admin-Special-Show-status-0" class="line">未审核专题</a>
+<a href="?s=Admin-Special-Show-status-1" class="line">已审核专题</a>
+</div>
+<div id="menu8" style="display:none">
+<a href="?s=Admin-Forum-Show" class="on">全部</a>
+<a href="?s=Admin-Forum-Show-sid-1">视频</a>
+<a href="?s=Admin-Forum-Show-sid-2">文章</a>
+<a href="?s=Admin-Forum-Show-sid-3">专题</a>
+<a href="?s=Admin-Forum-Show-sid-4">标签</a>
+<a href="?s=Admin-Forum-Show-sid-5">留言</a>
+<a href="?s=Admin-Forum-Show-sid-8">明星</a>
+<a href="?s=Admin-Forum-Show-sid-9">角色</a>
+<a href="?s=Admin-Forum-Show-sid-24">报错</a>
+</div>
+<div id="menu9" style="display:none">
+<a href="?s=Admin-User-Show" class="on">用户管理</a>
+<a href="?s=Admin-User-Add">添加用户</a>
+<a href="?s=Admin-Record-Show">用户日志</a>
+<a href="?s=Admin-Admin-Show">后台用户</a>
+<a href="?s=Admin-Admin-Add">添加管理员</a>
+</div>
+<div id="menu10" style="display:none">
+<a href="?s=Admin-Data-Show" class="on">数据库备份</a>
+<a href="?s=Admin-Data-Restore">数据库恢复</a>
+<a href="?s=Admin-Data-Show-type-repair">数据库优化</a>
+<a href="?s=Admin-Data-Sql">执行SQL语句</a>
+<a href="?s=Admin-Data-Replace">数据批量替换</a>  
+</div>
+<div id="menu11" style="display:none">
+<a href="?s=Admin-Orders-Show" class="on">订单管理</a>
+<a href="?s=Admin-Card-Show">充值卡密</a>
+<a href="?s=Admin-Ads-Show">站点广告</a>
+<a href="?s=Admin-Ads-Add">添加广告</a>
+<a href="?s=Admin-Slide-Show">首页轮播</a>
+<a href="?s=Admin-Slide-Add">添加轮播</a>
+<a href="?s=Admin-Link-Show">友情链接</a>
+<a href="?s=Admin-Link-Add">添加友链</a> 
+</div>
+<div id="menu12" style="display:none">
+<a href="?s=Admin-Star-Show" class="on">明星管理</a>
+<a href="?s=Admin-Star-Add">添加明星</a>
+<a href="?s=Admin-Role-Show">角色管理</a>
+<a href="?s=Admin-Role-Add">添加角色</a>
+<a href="?s=Admin-Star-Show-pic-false" class="line">无封面明星</a>
+<a href="?s=Admin-Star-Show-pic-true" class="line">有封面明星</a>
+<a href="?s=Admin-Role-Show-pic-false" class="line">无封面角色</a>
+<a href="?s=Admin-Role-Show-pic-true" class="line">有封面角色</a>
+<a href="?s=Admin-Role-Show-object_id-false" class="line">未关联视频角色</a>
+<a href="?s=Admin-Role-Show-object_id-true" class="line">已关联视频角色</a>
+<a href="?s=Admin-Role-Show-father_id-false" class="line">未关联明星角色</a>
+<a href="?s=Admin-Role-Show-father_id-true" class="line">已关联明星角色</a>
+</div>
+<div id="menu13" style="display:none">
+<a href="?s=Admin-Tag-Show" class="on">标签管理首页</a>
+<a href="?s=Admin-Tag-Show-type-vod_type" class="line">扩展分类[视频]</a>
+<a href="?s=Admin-Tag-Show-type-vod_tag" class="line">标签聚合[视频]</a>
+<a href="?s=Admin-Tag-Show-type-news_type" class="line">扩展分类[文章]</a>
+<a href="?s=Admin-Tag-Show-type-news_tag" class="line">标签话题[文章]</a>
+<a href="?s=Admin-Tag-Show-type-special_type" class="line">扩展分类[专题]</a>
+<a href="?s=Admin-Tag-Show-type-special_tag" class="line">标签聚合[专题]</a>
+<a href="?s=Admin-Tag-Show-type-star_type" class="line">扩展分类[明星]</a>
+<a href="?s=Admin-Tag-Show-type-star_tag" class="line">标签聚合[明星]</a>
+<a href="?s=Admin-Tag-Show-type-role_type" class="line">扩展分类[角色]</a>
+<a href="?s=Admin-Tag-Show-type-role_tag" class="line">标签聚合[角色]</a>
+</div>
+</td></tr>
+</table>
+</body>
+</html>

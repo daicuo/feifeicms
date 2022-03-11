@@ -1,0 +1,1 @@
+<strong>剧情：</strong>{$vod_content|strip_tags|msubstr=0,99,true} <a class="text-green" href="{:ff_url('vod/juqing',array('id'=>$vod_id),true)}" title="{$vod_name|msubstr=0,8,true}剧情介绍">详情>></a>

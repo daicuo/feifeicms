@@ -1,0 +1,500 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>后台用户管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script src="__PUBLIC__/js/admin.js"></script>
+<script src="__PUBLIC__/ckeditor4.7.3/ckeditor.js"></script>
+</head>
+<body class="body">
+<form action="?s=Admin-Vod-Update" method="post" name="myform" id="myform">
+<gt name="vod_id" value="0">
+<input type="hidden" name="vod_id" value="{$vod_id}">
+</gt>
+<div class="title">
+	<div class="tabs" id="tabs">
+		<a href="javascript:void(0)" class="on" id="1">{$vod_tplname}视频</a>
+		<a href="javascript:void(0)" id="2">演职人员</a>
+		<a href="javascript:void(0)" id="3">扩展信息</a>
+		<a href="javascript:void(0)" id="4">分集剧情</a>
+		<a href="javascript:void(0)" id="5">经典台词</a>
+		<a href="javascript:void(0)" id="6">看点糟点</a>
+		<a href="javascript:void(0)" id="7">大结局</a>
+	</div>
+  <div class="right"><a href="?s=Admin-Vod-Show">返回视频管理</a></div>
+</div>
+<div class="add">
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs1">
+  <tr>
+    <td class="tl">视频名称：</td>
+    <td class="tr"><input type="text" name="vod_name" id="vod_name" value="{$vod_name}" maxlength="255" error="* 名称不能为空" class="w300">
+    视频分类：<label><select name="vod_cid" id="vod_cid" style="width:107px"><option value="">请选择</option><volist name=":ff_mysql_list('sid:1;limit:0;order:list_pid asc,list_oid;sort:asc')" id="feifei"><option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$list_id">selected</eq>>{$feifei.list_name}</option><volist name="feifei.list_son" id="feifeison"><option value="{$feifeison.list_id}" <eq name="feifeison.list_id" value="$list_id">selected</eq>>├ {$feifeison.list_name}</option></volist></volist></select></label>
+		视频权限：<label><select name="vod_ispay" id="vod_ispay" style="width:107px"><option value='0'>免费点播</option><option value='1' <eq name="vod_ispay" value="1">selected</eq>>VIP点播</option></select></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">视频副标：</td>
+    <td class="tr">
+		<input type="text" name="vod_title" id="vod_title" maxlength="255" value="{$vod_title}" class="w300">
+		单片付费：<label><input type="text" name="vod_price" id="vod_price" value="{$vod_price|intval}" maxlength="6" class="w100 ct"></label>
+		视频试看：<label><input type="text" name="vod_trysee" id="vod_trysee" value="{$vod_trysee|intval}" maxlength="3" class="w100 ct"></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">链接别名：</td>
+    <td class="tr">
+		<input type="text" name="vod_ename" id="vod_ename" value="{$vod_ename}" maxlength="120" class="w300">
+		总共集数：<label><input type="text" name="vod_total" id="vod_total" maxlength="10" value="{$vod_total}" class="w100 ct" title="如：共40集"></label>
+		连载集数：<label><input type="text" name="vod_continu" id="vod_continu" maxlength="15" value="{$vod_continu}" class="w100 ct" title="留空为完结"></label>
+	</td>
+  </tr>	
+  <tr>
+    <td class="tl">节目周期：</td>
+    <td class="tr" style="position:relative">
+		<input type="text" name="vod_weekday" id="vod_weekday" value="{$vod_weekday}" placeholder="一,二,三,四,五,六,七" class="w300"></label>
+		上映日期：<label><input type="text" name="vod_filmtime" id="vod_filmtime" maxlength="10" value="<notempty name="vod_filmtime">{$vod_filmtime|date='Y-m-d',###}</notempty>" class="w100 ct" title="如：2013-07-20"></label>
+		更新日期：<label><input type="text" name="vod_addtime" id="vod_addtime" value="{$vod_addtime|date='Y-m-d H:i:s',###}" class="w100"> <input name="checktime" type="checkbox" style="border:none;width:auto;position:absolute; top:8px" value="1" checked title="勾选则使用系统当前时间"></label></td>
+  </tr>
+  <tr>
+    <td class="tl">电视频道：</td>
+    <td class="tr">
+		<input type="text" name="vod_tv" id="vod_tv" value="{$vod_tv}" placeholder="湖南卫视,上海卫视,浙江卫视" class="w300">
+		视频时长：<label><input type="text" name="vod_length" id="vod_length" maxlength="6" value="{$vod_length}" class="w100 ct" title="单位：秒"></label>
+		版权跳转：<label><input type="text" name="vod_copyright" id="vod_copyright" maxlength="7" value="{$vod_copyright}" class="w100 ct" title="单位秒"></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">来源标识：</td>
+    <td class="tr">
+		<input type="text" name="vod_reurl" id="vod_reurl" value="{$vod_reurl}" maxlength="150" class="w300">
+		豆瓣评分：<label><input type="text" name="vod_douban_score" id="vod_douban_score" value="{$vod_douban_score}" class="w100 ct"></label>
+		豆瓣ID值：<label><input type="text" name="vod_douban_id" id="vod_douban_id" value="{$vod_douban_id}" class="w100 ct"></label>
+		<a id="vod_douban_caiji" href="javascript:;">获取资料</a>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">扩展分类：</td>
+    <td class="tr"><input type="text" name="vod_type" id="vod_type" maxlength="255" value="{$vod_type}" class="w660">
+    <p id="vod_type_label" style="padding:0; margin:5px 0 0 0"><volist name=":explode(',',$list_extend['type'])" id="val"><a href="javascript:;" class="select" data-id="vod_type">{$val}</a></volist></p></td>
+  </tr>
+  <tr>
+    <td class="tl">视频TAG：</td>
+    <td class="tr"><input type="text" name="vod_keywords" id="vod_keywords"  maxlength="255" value="{$vod_keywords}" class="w660 xy_tag"><p id="vod_keywords_label" style="padding:0; margin:5px 0 0 0">常用TAG加载中...</p></td>
+  </tr>
+  <tr>
+    <td class="tl">封面图片：</td>
+    <td class="tr"><label style="float:left; margin-top:3px; margin-right:5px"><input type="text" name="vod_pic" id="vod_pic" maxlength="255" value="{$vod_pic}" class="w400" onMouseOver="if(this.value)showpic(event,this.value,'{&upload_path}/');" onMouseOut="hiddenpic();"></label><iframe src="?s=Admin-Upload-Show-sid-vod" scrolling="no" topmargin="0" width="280" height="26" marginwidth="0" marginheight="0" frameborder="0" align="left" style="margin-top:3px; float:left"></iframe></td>
+  </tr>
+  <tr>
+    <td class="tl">轮播图片：</td>
+    <td class="tr"><label style="float:left; margin-top:3px; margin-right:5px"><input type="text" name="vod_pic_slide" id="vod_pic_slide" maxlength="255" value="{$vod_pic_slide}" class="w400" onMouseOver="if(this.value)showpic(event,this.value,'{&upload_path}/');" onMouseOut="hiddenpic();"></label><iframe src="?s=Admin-Upload-Show-sid-vod-fileback-vod_pic_slide" scrolling="no" topmargin="0" width="280" height="26" marginwidth="0" marginheight="0" frameborder="0" align="left" style="margin-top:3px; float:left"></iframe></td>
+  </tr> 
+  <tr>
+    <td class="tl">背景图片：</td>
+    <td class="tr"><label style="float:left; margin-top:3px; margin-right:5px"><input type="text" name="vod_pic_bg" id="vod_pic_bg" maxlength="255" value="{$vod_pic_bg}" class="w400" onMouseOver="if(this.value)showpic(event,this.value,'{&upload_path}/');" onMouseOut="hiddenpic();"></label><iframe src="?s=Admin-Upload-Show-sid-vod-fileback-vod_pic_bg" scrolling="no" topmargin="0" width="280" height="26" marginwidth="0" marginheight="0" frameborder="0" align="left" style="margin-top:3px; float:left"></iframe></td>
+  </tr>		
+  <tr>
+    <td class="tl">发行年份：</td>
+    <td class="tr"><input type="text" name="vod_year" id="vod_year" value="{$vod_year}" class="w100 ct"> <label id="vod_year_label"><volist name=":explode(',',$list_extend['year'])" id="val"><a href="javascript:;" class="select" data-id="vod_year">{$val}</a></volist></label></td>
+  </tr> 
+  <tr>
+    <td class="tl">发行地区：</td>
+    <td class="tr"><input type="text" name="vod_area" id="vod_area" value="{$vod_area}" class="w100 ct"> <label id="vod_area_label"><volist name=":explode(',',$list_extend['area'])" id="val"><a href="javascript:;" class="select" data-id="vod_area">{$val}</a></volist></label></td>
+  </tr>   
+  <tr>
+    <td class="tl">视频对白：</td>
+    <td class="tr"><input type="text" name="vod_language" id="vod_language" value="{$vod_language}" class="w100 ct"> <label id="vod_language_label"><volist name=":explode(',',$list_extend['language'])" id="val"><a href="javascript:;" class="select" data-id="vod_language">{$val}</a></volist></label></td>
+  </tr>
+  <tr>
+    <td class="tl">视频版本：</td>
+    <td class="tr"><input type="text" name="vod_version" id="vod_version" value="{$vod_version}" class="w100 ct"> <label id="vod_version_label"><volist name=":explode(',',$list_extend['version'])" id="val"><a href="javascript:;" class="select" data-id="vod_version">{$val}</a></volist></label></td>
+  </tr>
+  <tr>
+    <td class="tl">资源类别：</td>
+    <td class="tr"><input type="text" name="vod_state" id="vod_state" value="{$vod_state|default='正片'}" class="w100 ct"> <label id="vod_state_label"><volist name=":explode(',',$list_extend['state'])" id="val"><a href="javascript:;" class="select" data-id="vod_state">{$val}</a></volist></label></td>
+  </tr>
+  <tr>
+    <td class="tl">独立模板：</td>
+    <td class="tr"><input type="text" name="vod_skin" id="vod_skin" value="{$vod_skin}" maxlength="25" class="w100 ct"></td>
+  </tr>	
+  <php>$array_url = explode('$$$',$vod_url);</php>
+	<tbody id="vod-url">
+  <volist name="vod_play_list" id="feifei" key="u">
+	<tr id="sid{$feifei.player_sid}">
+		<td class="tl">播放地址<strong>{$u}</strong>：</td>
+		<td class="tr">
+		<p class="play_list">
+		<select name="vod_play[]" id="vod_play"><volist name=":F('_feifeicms/player')" id="player_name" key="i"><option value="{$key}" <if condition="$key eq $feifei['player_name_en']">selected</if>>{$i}.{$key}.{$player_name[0]}</option></volist></select>
+		<select name="vod_server[]" id="vod_server" style="width:140px"><option value="">不使用公共前缀</option><volist name=":C('play_server')" id="server_name" key="n"><option value="{$key}" <if condition="$key eq $feifei['server_name']">selected</if>>{$server_name}</option></volist></select>
+		<a class="play_repair" href="javascript:;">检正格式</a>
+		第{$feifei.player_sid}组
+		</p>
+		<p class="play_url">
+			<textarea name='vod_url[]'>{$array_url[($feifei['player_sid']-1)]}</textarea>
+		</p>
+		</td>
+	</tr>
+  </volist>
+  <empty name="vod_play_list"><script type="text/javascript">add_url();</script></empty>
+  </tbody>
+   <tr>
+    <td class="tl">增加播放地址：</td>
+    <td class="tr"><a href="javascript:add_url();" class="play_url_add">点击这里添加一组播放地址</a> <label style="color:#666">格式：分集标题$播放地址$分集图片$分集看点$指定播放器；占位标记为feifeicms</label></td>
+  </tr>    
+  <tr>
+    <td class="tl">视频简介：</td>
+    <td class="tr padding-5050"><textarea name="vod_content" id="vod_content">{$vod_content}</textarea></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs2" style="display:none">
+  <tr>
+    <td class="tl">导演：</td>
+    <td class="tr"><input type="text" name="vod_director" id="vod_director" maxlength="255" value="{$vod_director}" class="w400" title="可使用半角逗号,分隔"></td>
+  </tr>
+  <tr>
+    <td class="tl">主演：</td>
+    <td class="tr"><input type="text" name="vod_actor" id="vod_actor" maxlength="255" value="{$vod_actor}" class="w400" title="可使用半角逗号,分隔"></td>
+  </tr>
+  <tr>
+    <td class="tl">编剧：</td>
+    <td class="tr"><input type="text" name="vod_writer" id="vod_writer" maxlength="255" value="{$vod_writer}" class="w400" title="可使用半角逗号,分隔"></td>
+  </tr>
+  <tr>
+    <td class="tl">制片人：</td>
+    <td class="tr"><input type="text" name="vod_producer" id="vod_producer" maxlength="255" value="{$vod_producer}" class="w400" title="可使用半角逗号,分隔"></td>
+  </tr>
+  <tr>
+    <td class="tl">摄影：</td>
+    <td class="tr"><input type="text" name="vod_camera" id="vod_camera" maxlength="255" value="{$vod_camera}" class="w400" title="可使用半角逗号,分隔"></td>
+  </tr>
+  <tr>
+    <td class="tl">剪辑：</td>
+    <td class="tr"><input type="text" name="vod_editor" id="vod_editor" maxlength="255" value="{$vod_editor}" class="w400" title="可使用半角逗号,分隔"></td>
+  </tr>	
+  <tr>
+    <td class="tl">音乐：</td>
+    <td class="tr"><input type="text" name="vod_music" id="vod_music" maxlength="255" value="{$vod_music}" class="w400" title="可使用半角逗号,分隔"></td>
+  </tr>	
+  <tr>
+    <td class="tl">美术：</td>
+    <td class="tr"><input type="text" name="vod_art" id="vod_art" maxlength="255" value="{$vod_art}" class="w400" title="可使用半角逗号,分隔"></td>
+  </tr>				
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs3" style="display:none">
+  <tr>
+    <td class="tl">视频状态：</td>
+    <td class="tr">
+		<select name="vod_status" style="width:157px">
+		<option value="1">显示</option>
+		<option value="0" <eq name="vod_status" value="0">selected</eq>>隐藏</option>
+		</select>
+		</td>
+  </tr>	    
+  <tr>
+    <td class="tl">视频权重：</td>
+    <td class="tr">
+		<label><input type="text" name="vod_stars" id="vod_stars" maxlength="1" value="{$vod_stars|intval}" class="w150"></label>
+		首字母：<input type="text" name="vod_letter" id="vod_letter" value="{$vod_letter}" maxlength="1" class="w150">
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">总人气：</td>
+    <td class="tr">
+		<input type="text" name="vod_hits" id="vod_hits" maxlength="15" value="{$vod_hits|intval}" class="w150">
+		月人气：<label><input type="text" name="vod_hits_month" id="vod_hits_month" maxlength="15" value="{$vod_hits_month|intval}" class="w150"></label>
+		</td>
+  </tr>       
+  <tr>
+    <td class="tl">周人气：</td>
+    <td class="tr">
+		<input type="text" name="vod_hits_week" id="vod_hits_week" maxlength="15" value="{$vod_hits_week|intval}" class="w150">
+		日人气：<label><input type="text" name="vod_hits_day" id="vod_hits_day" maxlength="15" value="{$vod_hits_day|intval}" class="w150"></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">评分值：</td>
+    <td class="tr">
+		<input type="text" name="vod_gold" id="vod_gold" value="{$vod_gold|intval}" maxlength="4" class="w150">
+		评分人：<label><input type="text" name="vod_golder" id="vod_golder" value="{$vod_golder|intval}" maxlength="8" class="w150"></label>
+		</td>
+  </tr> 
+  <tr>
+    <td class="tl">点赞数：</td>
+    <td class="tr">
+		<input type="text" name="vod_up" id="vod_up" value="{$vod_up|intval}" maxlength="8" class="w150">
+		踩一下：<label><input type="text" name="vod_down" id="vod_down" value="{$vod_down|intval}" maxlength="8" class="w150"></label>
+		</td>
+  </tr>     
+  <tr>
+    <td class="tl">录入编辑：</td>
+    <td class="tr">
+		<input type="text" name="vod_inputer" id="vod_inputer" value="{$vod_inputer}" maxlength="15" class="w150">
+		大结局：<label><input type="text" name="vod_isend" id="vod_isend" value="{$vod_isend}" maxlength="1" class="w150"></label>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">关联系列：</td>
+    <td class="tr">
+		<input type="text" name="vod_series" id="vod_series" value="{$vod_series}" maxlength="120" class="w400">
+    <p class="lead">所有需要关联的模型统一设置一个关键词，如（变形金刚），留空则使用TAG标签关联。</p>
+		</td>
+  </tr>
+  <tr>
+    <td class="tl">跳转URL：</td>
+    <td class="tr"><input type="text" name="vod_jumpurl" id="vod_jumpurl" value="{$vod_jumpurl}" maxlength="150" class="w400"></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs4" style="display:none">
+  <tbody id="vod-scenario">
+  	<volist name="vod_scenario.info" id="scenario">
+    <tr>
+      <td class="tl">第{$i}集：</td>
+      <td class="tr"><p class="play_url"><textarea name="vod_scenario[info][]">{$scenario}</textarea></p></td>
+    </tr>
+    </volist>
+  </tbody>
+   <tr>
+    <td class="tl">增加剧情介绍：</td>
+    <td class="tr"><a href="javascript:add_scenario();" class="play_url_add">点击这里添加一集剧情介绍</a></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs5" style="display:none">
+  <tr>
+    <td class="tr padding-5050"><textarea name="vod_lines" id="vod_lines">{$vod_lines}</textarea></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs6" style="display:none">
+  <tr>
+    <td class="tr padding-5050"><textarea name="vod_watch" id="vod_watch">{$vod_watch}</textarea></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table" id="tabs7" style="display:none">
+  <tr>
+    <td class="tr padding-5050"><textarea name="vod_ending" id="vod_ending">{$vod_ending}</textarea></td>
+  </tr>
+</table>
+<ul class="footer">
+	<input type="submit" name="submit" value="提交"> <input type="reset" name="reset" value="重置">
+</ul>
+</div>
+</form>
+<include file="./Public/system/plus_showpic.html" />
+<include file="./Public/system/footer.html" />
+<script type="text/javascript">
+function add_url(){
+	$count = $("#vod-url>tr").length;
+	$tr ='<tr><td class="tl">播放地址<strong>'+($count+1)+'</strong>：</td><td class="tr"><p class="play_list"><select name="vod_play[]" id="vod_play"><volist name=":F(\'_feifeicms/player\')" id="player_name" key="i"><option value="{$key}">{$i}.{$key}.{$player_name[0]}</option></volist></select> <select name="vod_server[]" id="vod_server"><option value="">不使用公共前缀</option><volist name=":C(\'play_server\')" id="server_name" key="n"><option value="{$key}">{$server_name}</option></volist></select> <a class="play_repair" href="javascript:;">检正格式</a></p><p class="play_url"><textarea name="vod_url[]"></textarea></p></td></tr>';
+	if($count > 0){
+		$("#vod-url>tr:last-child").after($tr);
+		$("#vod-url>tr:last textarea").val('');
+	}else{
+		$("#vod-url").append($tr);
+	}
+}
+function add_scenario(){
+	$count = $("#vod-scenario>tr").length;
+	$tr ='<tr><td class="tl">第'+($count+1)+'集：</td><td class="tr"><p class="play_url"><textarea name="vod_scenario[info][]"></textarea></p></td></tr>';
+	if($count > 0){
+		$("#vod-scenario>tr:last-child").after($tr);
+		$("#vod-scenario>tr:last textarea").val('');
+	}else{
+		$("#vod-scenario").append($tr);
+	}
+}
+//编辑器调用
+CKEDITOR.replace('vod_content',{
+	filebrowserImageUploadUrl : './?g=admin&m=upload&a=ckeditor&sid=vod'
+});
+CKEDITOR.replace('vod_lines',{
+	filebrowserImageUploadUrl : './?g=admin&m=upload&a=ckeditor&sid=vod'
+});
+CKEDITOR.replace('vod_watch',{
+	filebrowserImageUploadUrl : './?g=admin&m=upload&a=ckeditor&sid=vod'
+});
+CKEDITOR.replace('vod_ending',{
+	filebrowserImageUploadUrl : './?g=admin&m=upload&a=ckeditor&sid=vod'
+});
+//常用TAG加载
+$("#vod_keywords_label").load("?s=Admin-Tag-Showajax-input-vod_keywords-sid-vod_tag");
+//tabs标签
+$("#tabs>a").click(function(){
+	var no = $(this).attr('id');
+	var n = $("#tabs>a").length;
+	showtab('tabs',no,n);
+	$("#tabs>a").removeClass("on");
+	$(this).addClass("on");
+	return false;
+});
+//表单提交
+$("#myform").submit(function(){
+	if($feifeicms.form.empty('myform','vod_name') == false){
+		return false;
+	}
+	if($("#vod_cid").val()==0){
+		alert('请选择分类');
+		return false;
+	}
+});
+// 分类change
+$('#vod_cid').on("change", function(){
+	//alert($("select[id='vod_state']").children('option').eq(1).val());
+	//$('#vod_state').children('option').eq(0).val();
+	//
+	$cid = $(this).children('option:selected').val();
+	if($cid){
+		$.getJSON('?s=Admin-List-extend-id-'+$cid, null, function(json){
+			if(json.status==1){
+			 $.each(json.data, function(key, value){
+				 if(value != ''){
+					 $("#vod_"+key+"_label").empty();
+					 $.each(value, function(key2, value2){
+							$("#vod_"+key+"_label").append('<a href="javascript:;" class="select" data-id="vod_'+key+'">'+value2+'</a>');
+					 });
+				 }
+				});
+			}
+		});
+	}
+});
+//默认选项点击选择
+$(document).on("click", ".select", function(){
+	$id = $(this).attr('data-id');
+	if($id == 'vod_type'||$id == 'vod_keywords'||$id == 'vod_area'||$id == 'vod_language'){
+		$val = $("input[id='"+$id+"']").val();
+		if($val == ''){
+			$val = $(this).text();
+		}else{
+			$val = $val+','+$(this).text();
+			$val = $val.split(',').unique().join(',');//排重
+		}
+		$("input[id='"+$id+"']").val($val);
+	}else{
+		$("input[id='"+$id+"']").val($(this).text());
+	}
+});
+// 豆瓣资料获取
+$('#vod_douban_caiji').on('click', function(){
+	$(this).html('请稍等...');
+	$id = $('#vod_douban_id').val();
+	if($id > 10000){
+		$.ajax({
+		 type: "get",
+		 async: false,
+		 url: "//cdn.feifeicms.co/server/v3/douban.php?key={:C('apikey_douban')}&id="+$id,
+		 dataType: "jsonp",
+		 jsonp: "callback",
+		 jsonpCallback:"DouBan",
+		 timeout: 5000,
+		 success: function(json){
+			 if(json.status == 200){
+				 if(json.data.vod_total){
+					 $('#vod_total').val(json.data.vod_total);
+				 }
+				 if(json.data.vod_continu){
+					 $('#vod_continu').val(json.data.vod_continu);
+				 }
+				 if(json.data.vod_isend){
+					 $('#vod_isend').val(json.data.vod_isend);
+				 }
+				 if(json.data.vod_name){
+					 $('#vod_name').val(json.data.vod_name);
+				 }
+				 if(json.data.vod_title){
+					 $('#vod_title').val(json.data.vod_title);
+				 }
+				 if(json.data.vod_pic){
+					 $('#vod_pic').val(json.data.vod_pic);
+				 }
+				 if(json.data.vod_year){
+					 $('#vod_year').val(json.data.vod_year);
+				 }
+				 if(json.data.vod_filmtime){
+					 $('#vod_filmtime').val(json.data.vod_filmtime);
+				 }
+				 if(json.data.vod_language){
+					 $('#vod_language').val(json.data.vod_language);
+				 }
+				 if(json.data.vod_area){
+					 $('#vod_area').val(json.data.vod_area);
+				 }
+				 if(json.data.vod_type){
+					 $('#vod_type').val(json.data.vod_type);
+				 }
+				 if(json.data.vod_actor){
+					 $('#vod_actor').val(json.data.vod_actor);
+				 }
+				 if(json.data.vod_director){
+					 $('#vod_director').val(json.data.vod_director);
+				 }
+				 if(json.data.vod_writer){
+					 $('#vod_writer').val(json.data.vod_writer);
+				 }
+				 if(json.data.vod_length){
+					 $('#vod_length').val(json.data.vod_length*60);
+				 }
+				 if(json.data.vod_content){
+					 CKEDITOR.instances.vod_content.setData(json.data.vod_content);
+				 }
+				 if(json.data.vod_gold){
+					 $('#vod_douban_score').val(json.data.vod_douban_score);
+				 }
+				 if(json.data.vod_keywords){
+					 $('#vod_keywords').val(json.data.vod_keywords);
+				 }
+				 if(!$('#vod_reurl').val()){
+					$('#vod_reurl').val(json.data.vod_reurl);
+				 }
+				 $('#vod_inputer').val(json.data.vod_inputer);
+			 }else{
+				 alert(json.error);
+			 }
+		 },
+		 error: function(){
+			alert('请求解析服务器失败。');
+		 }
+ });
+	}else{
+		alert('请先填写该视频对应的豆瓣的ID。');
+	}
+});
+// 校正播放地址
+$(document).on("click", "a.play_repair", function(){
+	$html_play = $(this).parent();      //播放列表对象
+	$html_url = $(this).parent().next();//播放地址对象
+	//alert($html_play.find("select").eq(0).val());
+	//alert($html_url.find("textarea").eq(0).val());
+	//无播放地址
+	if($html_url.find("textarea").eq(0).val()==''){
+		return false;
+	}
+	var $array_url = $html_url.find("textarea").eq(0).val().split("\n");
+	var $array_new = new Array();
+	for(var $key in $array_url){
+		if($key != 'unique'){
+			$urls = $array_url[$key].split('$');
+			if(!$urls[4]){
+				$urls[4] = $html_play.find("select").eq(0).val();
+			}
+			if(!$urls[3]){
+				$urls[3] = '{feifeicms}';
+			}
+			if(!$urls[2]){
+				$urls[2] = '{feifeicms}';
+			}
+			if(!$urls[1]){
+				$urls[1] = $urls[0];
+				$urls[0] = $key*1+1;
+			}else{
+				$urls[1] = $urls[1];
+				$urls[0] = $urls[0];
+			}
+			$array_new[$key] = $urls.join('$');
+		}
+	}
+	$html_url.find("textarea").eq(0).val($array_new.join('\n'));
+});
+</script>
+</body>
+</html>

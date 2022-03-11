@@ -1,0 +1,234 @@
+.navbar-default{
+  border-radius: 0;
+}
+.navbar-default .container{
+  padding-left:5px;
+	padding-right:5px;
+}
+.navbar-default .navbar-header{
+}
+.navbar-default .navbar-header .navbar-toggle{
+	display:inline;
+}
+.navbar-default .navbar-header .navbar-toggle .navbar-brand{
+	font-size:1.1em;
+}
+
+.navbar-default .navbar-nav{
+	margin-top:5px;
+	margin-left:-5px;
+	margin-right:-5px;
+}
+.navbar-default .navbar-nav > li{
+	display:inline-block;
+	float:left;
+	width:25%;
+	padding-left:5px;
+	padding-right:5px;
+	text-align:center;
+	margin-top:5px;
+}
+.navbar-default .navbar-nav > li a{
+	font-size:1.0em;
+	padding-left:0;
+	padding-right:0;
+	padding-top:6px;
+	padding-bottom:6px;
+	border:1px solid #101010;
+}
+.vod-type .gallery-cell{
+	margin-right:15px;
+}
+.ff-img-215 .ff-img{
+	height:140px;
+}
+.modal-scrollbar-measure {
+	display:none
+}
+.page-header {
+	margin:0 0 10px 0;
+	padding:0;
+}
+.breadcrumb, .table {
+	font-size:1.2em;
+}
+.pagination > li > a,
+.pagination > li > span {
+  color:#096;
+}
+.pagination > li.disabled > a{
+  color:#333;
+}
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+	color:#333;
+}
+html,body {
+	overflow-x: hidden;
+}
+body{
+	background-color:#efefef;
+	font-size:1.4em;
+}
+body, button, input, select, textarea{ 
+  font-family: Microsoft YaHei, Helvetica, '宋体' , Tahoma, Arial, "\5b8b\4f53", sans-serif;
+}
+a{
+	color:#000;
+	text-decoration:none;
+}
+a:hover{
+	color:#096;
+	text-decoration:none;
+}
+/*ff-inc*/
+.ff-bg{
+	background:#fff;
+}
+.ff-col{
+	padding:0px 5px;
+}
+.ff-col-0{
+	padding:0px;
+}
+.mb-1{
+	margin-bottom:15px;
+}
+.text-mr-1 a{
+	margin-right:5px;
+}
+.text-green{
+	color:#090;
+}
+a.text-green{
+	color:#090;
+}
+a.text-green:hover{
+	color:#333;
+}
+.ff-footer{
+	padding:10px 0;
+}
+.ff-totop {
+	position: fixed;
+	right: 10px;
+	bottom: 10px;
+	color: #fff;
+	text-align: center;
+	border-radius: 2px;
+	z-index: 1;
+	display: block;
+	display: none;
+	background-color: #5cb85c;
+	border-color: #4cae4c;
+}
+.ff-totop:hover {
+	background-color: #449d44;
+	border-color: #398439;
+}
+.ff-totop i {
+	width: 40px;
+	height: 40px;
+	line-height: 40px;
+}
+/*register*/
+.user-register{
+}
+.user-register h2{
+	padding:30px 0;
+	font-size:1.4em;
+}
+.user-register h2 a:hover{
+	text-decoration:none
+}
+.user-register h5 a{
+	margin:0 10px;
+}
+/*user-login*/
+.user-login{
+}
+.user-login h2{
+	padding:30px 0;
+	font-size:1.4em;
+}
+.user-login h2 a:hover{
+	text-decoration:none
+}
+.user-login h5 a{
+	margin:0 10px;
+}
+/*user-forget*/
+.user-forget{
+}
+.user-forget h2{
+	padding:30px 0;
+	font-size:1.4em;
+}
+.user-forget h2 a:hover{
+	text-decoration:none
+}
+.user-forget h5 a{
+	margin:0 10px;
+}
+.user-forget .ff-vcode-img{
+	height:32px;
+	cursor: pointer;
+}
+/*user-center*/
+.user-center{
+	padding-top:50px;
+}
+.user-center .navbar-header{
+	margin-left:-10px;	
+}
+.user-center h4.user-name{
+	padding:5px 0;
+}
+.user-center h6.user-link{
+	padding:0 0 10px 0;
+}
+.user-center .navbar-user{
+	margin:0 0 15px 0;
+}
+.user-center .face{
+	width:100px;
+	height:100px;
+}
+.user-center .safe dt{
+	font-size:1.1em;
+}
+.user-center .safe dd{
+	font-size:1.0em;
+	color:#999;
+	padding-bottom:15px;
+}
+.user-center table .forum-detail{
+	font-size:14px;
+	list-style:2.0em;
+}
+.user-center .vod-record{
+	margin-left:-10px;
+}
+.user-center .vod-record li{
+	padding:0 0 0 10px;
+	height:150px;
+	overflow:hidden;
+}
+.user-center .vod-record a.picbg{
+	width:100%; 
+	height:90px; 
+	display:block;
+	background-color:#ddd;
+	border-radius: 4px;
+	opacity: 0.9;
+}
+.user-index{
+	padding-top:0;
+}
+@media (min-width: 768px) {
+	.container {
+    width: 380px;
+  }
+}

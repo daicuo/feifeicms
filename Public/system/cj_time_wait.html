@@ -1,0 +1,47 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>采集任务等待中</title>
+</head>
+<body>
+<span id="session"></span>
+<table border='0' cellpadding='0' cellspacing='0' width='800' height='100%' align='center' style="border:1px solid #CCCCCC; font-size:12px">
+<tr><td valign='top' style="height:40px;line-height:40px;background:#DEEDFE;color:#0000FF;text-align:center;font-size:16px">API视频资源库定时采集器任务执行中（请勿关闭该页面）</td></tr>
+<tr><td valign='top' height='1' style="background:#e8e8e8"></td></tr>
+<tr><td valign='top' id='caiji' style="height:45%;text-align:center; padding:20px; overflow:hidden"><h2>定时采集任务等侍中...</h2></td></tr>
+<tr><td valign='top' height='1' style="background:#e8e8e8"></td></tr>
+<tr><td valign='top' id='create' style="height:45%;text-align:center; padding:20px; overflow:hidden"><h2>生成静态网页等待中...</h2></td></tr>
+<tr><td valign='top' height='1' style="background:#e8e8e8"></td></tr>
+</table>
+<script>
+var $time = new Array();
+$time['caiji'] = {$caiji};
+$time['create'] = {$create};
+if($time['caiji'] > 0){
+	setInterval('$caiji()',1000*60*{$caiji});
+}
+if($time['create'] > $time['caiji']){
+	setInterval('$create()',1000*60*{$create});
+}
+var urln = 0;
+var array_url = new Array();<volist name="url" id="feifei">array_url[{$key}]='{$feifei}';</volist>
+function $caiji(){
+	if(urln < array_url.length-1){
+		urln++;
+	}else{
+		urln = 0;
+	}
+	if(array_url[urln]){
+		document.getElementById("caiji").innerHTML = "<iframe width='95%' height='200' src='"+array_url[urln]+"' scrolling='auto'></iframe>";
+	}
+}
+function $create(){
+	document.getElementById("create").innerHTML = "<iframe width='95%' height='100%' src='?s=Admin-Create-Task-hour-{$hour}-type-{$type}' scrolling='auto'></iframe>";
+}
+function $session(){
+	document.getElementById("session").innerHTML = "<iframe width='95%' height='10' src='?s=Admin-Index-Right' scrolling='auto' style='display:none'></iframe>";
+}
+setInterval('$session()',1000*60*5);//防止后台超时
+</script>
+</body>
+</html>

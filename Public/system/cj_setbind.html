@@ -1,0 +1,8 @@
+<select name="cid" id="cid">
+<volist name="list" id="feifei">
+<option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$list_id_bind">selected</eq>>{$feifei.list_name}</option>
+</volist>
+<option value="">取消绑定</option>
+</select>
+<input class="submit" type="button" value="提 交" onClick="submitbind('{$bind_key}', $('#cid').val());">
+<input class="submit" type="button" value="取 消" onClick="hidebind();">

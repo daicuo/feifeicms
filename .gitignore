@@ -1,0 +1,13 @@
+/Runtime/~app.php
+/Runtime/~runtime.php
+/Runtime/Conf/config.php
+/Runtime/Data/_feifeicms/player.php
+/Lib/Lib/Action/Plus/UpdateAction.class.php
+/Runtime/Cache
+/Runtime/Logs
+/Runtime/Temp
+*.log
+*.temp
+.idea
+.env
+.lock

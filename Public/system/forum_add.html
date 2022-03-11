@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>评论修改</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+</head>
+<body class="body">
+<include file="./Public/system/header.html" />
+<form action="?s=Admin-Forum-Update" method="post" name="myform" id="myform">
+<div class="title">
+	<div class="left"><eq name="isrepost" value="1">回复<else/>编辑</eq>评论</div>
+</div>
+<div class="add">
+	<input type="hidden" name="forum_sid" value="{$forum_sid}">
+	<input type="hidden" name="forum_cid" value="{$forum_cid|default=0}" />
+	<eq name="isrepost" value="1">
+	<input type="hidden" name="forum_pid" value="{$forum_id}">
+	<else/>
+	<input type="hidden" name="forum_id" value="{$forum_id}">
+	</eq>
+  <ul style="padding:10px 15px 10px 10px;">
+    <textarea name="forum_content" id="forum_content" style="width:100%;height:200px"><eq name="isrepost" value="0">{$forum_content|htmlspecialchars}</eq></textarea>
+  </ul>
+  <ul class="footer ct">
+    <input name="forum_status" type="checkbox" value="1" style="border:none; position:relative; top:10px;" <eq name="forum_status" value="1">checked</eq>>审核
+    <input type="submit" name="submit" value="提交">
+    <input type="reset" name="reset" value="重置">
+  </ul>
+</div>
+</form>
+<include file="./Public/system/plus_kedit.html" />
+<include file="./Public/system/footer.html" />
+</body>
+</html>

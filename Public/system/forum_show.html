@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>用户评论管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+</head>
+<body class="body">
+<form action="?s=Admin-Forum-Show" method="post" name="myform" id="myform">
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<thead><tr><th class="r"><span style="float:left">评论管理</span></th></tr></thead>
+  <tr>
+    <td class="tr ct" style="height:40px">
+    <input type="button" value="全部" class="submit" data-url="?s=Admin-Forum-Show">
+    <input type="button" value="未审核" class="submit" data-url="?s=Admin-Forum-Show-status-0">
+    <input type="button" value="已审核" class="submit" data-url="?s=Admin-Forum-Show-status-1">
+    <input type="button" value="主题贴" class="submit" data-url="?s=Admin-Forum-Show-sid-{$sid}-istheme-1">
+    <input type="button" value="回复贴" class="submit" data-url="?s=Admin-Forum-Show-sid-{$sid}-istheme-0">
+    <input type="text" name="wd" id="wd" maxlength="20" value="{$wd|default='可搜索(评论内容,用户呢称,用户IP)'|urldecode}" onClick="this.select();" style="color:#666;width:200px">
+    <input type="button" value="搜索" class="submit" onClick="post('?s=Admin-Forum-Show');"></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+  <thead>
+    <tr class="ct">
+      <th class="r" width="30">ID<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'id')))}" data-order="id" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="l" >评论内容</th>
+      <th class="l" width="60">回复<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'reply')))}" data-order="reply" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="l" width="60">举报<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'report')))}" data-order="report" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="l" width="60">支持<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'up')))}" data-order="up" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="l" width="60">反对<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'down')))}" data-order="down" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="r" width="120">发布时间<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'addtime')))}" data-order="addtime" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+    </tr>
+  </thead>
+  <tbody>
+  <volist name="list" id="feifei">
+  <tr>
+    <td class="r ct">
+			<input name='ids[]' type='checkbox' value='{$feifei.forum_id}' class="noborder" checked="checked">
+		</td>
+    <td class="r">
+		<eq name="feifei.forum_sid" value="24">
+			<p>
+      	<a href="?g=admin&m=vod&a=add&id={$feifei.forum_cid}#sid{$feifei.forum_pid}">{$feifei.forum_content|htmlspecialchars|nb|msubstr=0,480,'utf-8',true}</a>
+      </p>
+		<else/>
+    	<p>
+      	<strong><a href="{:ff_url('forum/read', array('id'=>$feifei['forum_id']), true)}" target="_blank"><eq name="feifei.forum_pid" value="0">主题贴<else/>回复贴</eq></a></strong>
+      	<a href="{:ff_url('forum/read',array('id'=>$feifei['forum_id']),true)}" title="查看评论" target="_blank" style="color:#666">{$feifei.forum_content|htmlspecialchars|nb|msubstr=0,480,'utf-8',true}</a>
+      </p>
+    	<p>
+      	<a href="?s=Admin-Forum-Show-uid-{$feifei.user_id}">{$feifei.user_name|htmlspecialchars}</a>
+        <a href="?s=Admin-Forum-Show-cid-{$cid}-wd-{$feifei.forum_ip}">{$feifei.forum_ip}</a>
+        <eq name="feifei.forum_status" value="1"><a href="?s=Admin-Forum-Status-ids-{$feifei.forum_id}-value-0" title="点击隐藏评论"><font color="green">已审核</font></a><else /><a href="?s=Admin-Forum-Status-ids-{$feifei.forum_id}-value-1" title="点击显示评论">未审核</a></eq>
+        <eq name="feifei.forum_istop" value="1"><a href="?s=Admin-Forum-Istop-ids-{$feifei.forum_id}-value-0" title="点击取消置顶"><font color="red">已置顶</font></a><else /><a href="?s=Admin-Forum-Istop-ids-{$feifei.forum_id}-value-1" title="点击置顶评论">未置顶</a></eq>
+        <a href="?s=Admin-Forum-Add-id-{$feifei.forum_id}" title="点击编辑评论">编辑评论</a>
+				<a href="?s=Admin-Forum-Add-isrepost-1-id-{$feifei.forum_id}" title="点击回复评论">回复评论</a>
+        <a href="?s=Admin-Forum-Del-ids-{$feifei.forum_id}" onClick="return confirm('确定删除该评论吗?')" title="点击删除评论">删除评论</a>
+				<a href="?s=Admin-Forum-Show-sid-{$feifei.forum_sid}-cid-{$feifei.forum_cid}" title="查看相同内容ID的评论">专辑详情</a>
+        <a href="?s=Admin-Forum-Show-pid-{$feifei.forum_id}" title="查看该讨论的回复贴">回复详情</a>
+      </p>
+		</eq>
+    </td>
+    <td class="r ct">{$feifei.forum_reply}</td>
+    <td class="r ct">{$feifei.forum_report}</td>
+    <td class="r ct">{$feifei.forum_up}</td>
+    <td class="r ct">{$feifei.forum_down}</td>
+    <td class="r ct">{$feifei.forum_addtime|date='Y.m.d H:i',###}</td>
+  </tr>
+  </volist>
+  </tbody>
+    <tr>
+      <td colspan="8" class="r pages">{$pages}</td>
+    </tr>   
+  <tfoot>
+    <tr>
+      <td colspan="9" class="r">
+      <input type="button" value="全选" class="submit" onClick="checkall('all');">
+      <input type="button" value="反选" class="submit" onClick="checkall();">
+      <input type="button" value="批量审核" class="submit" onClick="post('?s=Admin-Forum-Status-value-1');">
+      <input type="button" value="取消审核" class="submit" onClick="post('?s=Admin-Forum-Status-value-0');">
+      <input type="button" value="批量删除" class="submit" onClick="if(confirm('删除后将无法还原，确定要删除吗?')){post('?s=Admin-Forum-Del');}else{return false;}">
+      <input type="button" value="清空评论" class="submit" onClick="if(confirm('清空后将无法还原，确定要清空吗?')){
+      post('?s=Admin-Forum-Clear-sid-{$sid}');}else{return false;
+      }"></td>
+    </tr>  
+  </tfoot>
+</table>
+</form>
+<include file="./Public/system/footer.html" />
+<script type="text/javascript">
+$feifeicms.show.table();
+$feifeicms.show.sort("{$order}");
+//跳转
+$('.submit').on('click',function(){
+	if($(this).attr('data-url')){
+		self.location.href = $(this).attr('data-url');
+	}
+});
+</script>
+</body>
+</html>

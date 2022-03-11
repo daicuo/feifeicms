@@ -1,0 +1,1 @@
+document.write('<script language="javascript" src="'+cms.root+'Public/player/iframe.js"></script>');

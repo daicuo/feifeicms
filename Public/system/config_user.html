@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>用户注册与访问配置</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+<script>
+$(document).ready(function(){
+	// 评论功能切换
+	$(":radio[name='config[forum_type]']").on("click", function(){
+		$id = $(this).val();
+		forum_type_tab($id);
+	});
+	forum_type_check('{$forum_type}');
+});
+function forum_type_tab($id){
+	if($id!='feifei'){
+		$('#forum_type').show();
+		$('.forum_type').hide();
+		$("#forum_"+$id).show();
+	}else{
+		$('#forum_type').hide();
+	}
+}
+function forum_type_check($forum_type){
+	if($forum_type=='changyan'){
+		$('#forum_radio_changyan').attr("checked", true);
+	}else{
+		$('#forum_radio_feifei').attr("checked", true);
+	}
+	forum_type_tab($forum_type);
+}
+</script>
+</head>
+<body class="body">
+<div class="title">
+  <div class="left">评论参数配置</div>
+</div>
+<div class="add">
+  <form action="?s=Admin-Config-Update-type-user" method="post" name="myform" id="myform">
+  <ul><li class="left">评论功能模块选择：</li>
+    <li class="right" style="text-align:left">
+    <input type="radio" class="radio" name="config[forum_type]" id="forum_radio_feifei" value="feifei"/>系统自带
+    <input type="radio" class="radio" name="config[forum_type]" id="forum_radio_changyan"value="changyan"/>畅言
+    </li>
+  </ul>
+  <ul id="forum_type" style="display:none;">
+  	<li class="left">社交插件参数配置：</li>
+    <li class="right forum_type" id="forum_changyan" style="display:none;">
+    <p><input type="text" name="config[forum_type_changyan_appid]" value="{$forum_type_changyan_appid|default='cysXPib5E'}" maxlength="100" class="w400">
+    <label>APPID</label></p>
+    <p><input type="text" name="config[forum_type_changyan_conf]" value="{$forum_type_changyan_conf|default='prod_68505537e56f813cfafdcf88027d242e'}" maxlength="100" class="w400">
+    <label>CONF</label></p>
+    </li>
+  </ul>
+  <ul><li class="left">评论与留言需登录：</li>
+    <li class="right">
+    <input type="radio" class="radio" name="config[user_forum]" value="1" <eq name="user_forum" value="1">checked="checked"</eq>/>开启
+    <input type="radio" class="radio" name="config[user_forum]" value="0" <eq name="user_forum" value="0">checked="checked"</eq>/>关闭
+    </li>
+  </ul>
+  <ul><li class="left">评论与留言需审核：</li>
+    <li class="right">
+    <input type="radio" class="radio" name="config[user_check]" value="1" <eq name="user_check" value="1">checked="checked"</eq>/>开启
+    <input type="radio" class="radio" name="config[user_check]" value="0" <eq name="user_check" value="0">checked="checked"</eq>/>关闭
+    </li>
+  </ul>
+  <ul><li class="left">新评论邮件通知站长：</li>
+    <li class="right">
+    <input type="radio" class="radio" name="config[user_email_forum]" value="1" <eq name="user_email_forum" value="1">checked="checked"</eq>/>开启
+    <input type="radio" class="radio" name="config[user_email_forum]" value="0" <eq name="user_email_forum" value="0">checked="checked"</eq>/>关闭
+    </li>
+  </ul>
+  <ul><li class="left">新留言邮件通知站长：</li>
+    <li class="right">
+    <input type="radio" class="radio" name="config[user_email_guestbook]" value="1" <eq name="user_email_guestbook" value="1">checked="checked"</eq>/>开启
+    <input type="radio" class="radio" name="config[user_email_guestbook]" value="0" <eq name="user_email_guestbook" value="0">checked="checked"</eq>/>关闭
+    </li>
+  </ul>
+	<ul><li class="left">影片报错邮件通知站长：</li>
+    <li class="right">
+    <input type="radio" class="radio" name="config[user_email_error]" value="1" <eq name="user_email_error" value="1">checked="checked"</eq>/>开启
+    <input type="radio" class="radio" name="config[user_email_error]" value="0" <eq name="user_email_error" value="0">checked="checked"</eq>/>关闭
+    </li>
+  </ul>	
+  <ul><li class="left">用户交互间隔（秒）：</li>
+    <li class="right"><input type="text" class="w120" name="config[user_second]" maxlength="4" value="{$user_second}">
+    <label>两次评论/留言/顶踩/评分等间隔时间多少秒</label></li>
+  </ul>
+  <ul><li class="left">用户敏感词过滤 <font color="red">用|分隔</font>：</li>
+    <li class="right" style="height:165px;"><textarea name="config[user_replace]" id="user_replace" style="width:400px;height:150px">{$user_replace}</textarea></li>
+  </ul> 
+  <!-- -->
+  <ul class="footer">
+    <input type="submit" name="submit" value="提交"> <input type="reset" name="reset" value="重置">
+  </ul>
+  </form>
+</div>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

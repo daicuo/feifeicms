@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>后台用户管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+</head>
+<body class="body">
+<include file="./Public/system/plus_showpic.html" />
+<include file="./Public/system/plus_bg.html" />
+<form action="?s=Admin-Special-Show" method="post" name="myform" id="myform">
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+  <thead>
+    <tr class="ct">
+      <th class="l pd"><span style="float:left;">ID<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'id')))}" data-order="id" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif">专题名称</th>
+			<th class="l" width="80">权重<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'stars')))}" data-order="stars" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="l" width="60">人气<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'hits')))}" data-order="hits" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="l" width="80">时间<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'addtime')))}" data-order="addtime" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="r" width="100">相关操作</th>
+    </tr>
+  </thead>
+  <volist name="list" id="feifei">
+  <tbody>
+  <tr>
+    <td class="l pd">
+			<label class="fl ids_check"><input name='ids[]' type='checkbox' value='{$feifei.special_id}' class="noborder"></label>
+    	<label class="fl ids_show">{$feifei.special_id}</label>
+			<label class="fl">『<a href="{$feifei.list_url}">{$feifei.list_name}</a>』</label>
+			<label class="fl"><a href="{$feifei.special_url}" target="_blank">{$feifei.special_name}</a></label>
+		</td>
+		<td class="l ct"><img class="navpoint star_no_{$feifei.special_stars}" id="star_{$feifei.special_id}_0" src="__PUBLIC__/images/admin/starno.gif" onClick="setstars('Special',{$feifei.special_id},0);"><volist name="feifei['special_starsarr']" id="ajaxstar"><img src="__PUBLIC__/images/admin/star{$ajaxstar}.gif" onClick="setstars('Special',{$feifei.special_id},{$i});" id="star_{$feifei.special_id}_{$i}" class="navpoint"></volist></td>
+    <td class="l ct">{$feifei.special_hits}</td>
+    <td class="l ct">{$feifei.special_addtime|date='Y.m.d',###}</td>
+    <td class="r ct">
+		<a href="?s=Admin-Special-Add-id-{$feifei.special_id}" title="点击修改专题">编辑</a>
+		<eq name="feifei.special_status" value="1"><a href="?s=Admin-Special-Status-id-{$feifei.special_id}-sid-0" title="点击隐藏专题">隐藏</a><else /><a href="?s=Admin-Special-Status-id-{$feifei.special_id}-sid-1" title="点击显示专题"><font color="red">显示</font></a></eq>
+		<a href="?s=Admin-Special-Del-id-{$feifei.special_id}" onClick="return confirm('确定删除该专题吗?')" title="点击删除专题">删除</a>
+		</td>
+  </tr>
+  </tbody>
+  </volist>
+    <tr>
+      <td colspan="5" class="r pages">{$pages}</td>
+    </tr>
+  <tfoot>
+    <tr>
+      <td colspan="5" class="r">
+			<input type="button" value="全选" class="submit" onClick="checkall('all');">
+			<input name="" type="button" value="反选" class="submit" onClick="checkall();">
+			<input type="button" value="取消审核" class="submit" onClick="post('?s=Admin-Special-Status-value-0');">
+			<input type="button" value="批量审核" class="submit" onClick="post('?s=Admin-Special-Status-value-1');">
+			<input type="button" value="批量删除" class="submit" onClick="if(confirm('删除后将无法还原,确定要删除吗?')){post('?s=Admin-Special-Delall');}else{return false;}">
+			<input type="button" value="批量移动" class="submit" onClick="$('#psetcid').show();">
+			<span style="display:none" id="psetcid">
+			<select name="pestcid"><option value="">选择目标分类</option><volist name=":ff_mysql_list('sid:3;limit:0;order:list_pid asc,list_oid;sort:asc')" id="feifei"><option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$cid">selected</eq>>{$feifei.list_name}</option><volist name="feifei['list_son']" id="feifei"><option value="{$feifei.list_id}" <eq name="feifei.list_id" value="$cid">selected</eq>>├ {$feifei.list_name}</option></volist></volist></select>
+			<input type="button" class="submit" value="确定转移" onClick="post('?s=Admin-Special-Pestcid');"/></span>
+			</td>
+    </tr>  
+  </tfoot>
+</table>
+</form>
+<include file="./Public/system/footer.html" />
+<script type="text/javascript">
+$feifeicms.show.table();
+$feifeicms.show.sort("{$order}");
+</script>
+</body>
+</html>

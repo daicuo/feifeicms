@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:/Public
+Disallow:/Runtime
+Disallow:/Tpl

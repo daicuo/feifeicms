@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>模板管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$feifeicms.show.table();		
+});
+</script>
+</head>
+<body class="body">
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+  <thead>
+    <tr class="ct">
+      <th class="l"><span style="float:left;">网站模板管理</span>文件夹名/文件名</th>
+      <th class="l" width="200">文件描述</th>
+      <th class="l" width="80">文件大小</th>
+      <th class="l" width="150">修改时间</th>
+      <th class="r" width="100">相关操作</th>
+    </tr>
+  </thead>
+<tbody> 
+  <notempty name="dirlast">   
+  <tr class="firstalt">
+  <td colspan="5" class="r pd"><img src="__PUBLIC__/images/file/last.gif"> <a href="?g=admin&m=tpl&a=show&id={$dirlast}">上级目录</a> 当前目录: {$dirpath}</td>
+  </tr>
+  </notempty>
+  <volist name="list_dir" id="feifei">
+  <eq name="feifei.isDir" value="1">
+  <tr>
+  	<td class="l pd"><img src="__PUBLIC__/images/file/folder.gif" width="16" height="16"><a href="?g=admin&m=tpl&a=show&id={$feifei.pathfile}"> {$feifei.filename}</a></td>
+    <td class="l ct">文件夹</td>
+    <td class="l ct">{:byte_format(getdirsize($feifei['path'].'/'.$feifei['filename']))}</td>
+    <td class="l ct">{$feifei.mtime|ff_color_date='Y-m-d H:i:s',###}</td>
+    <td class="r ct"><a href="?g=admin&m=tpl&a=show&id={$feifei.pathfile}">下级目录</a></td>
+  </tr>
+  <else />
+  <tr>
+  	<in name="feifei.ext" value="jpg,gif,js,css,html,htm,php">
+    <td class="l pd"><img src="__PUBLIC__/images/file/{$feifei.ext}.gif" width="16" height="16"> {$feifei.filename}</td>
+    <else />
+    <td class="l pd"><img src="__PUBLIC__/images/file/other.gif" width="16" height="16"> {$feifei.filename}</td>
+    </in>
+    <td class="l ct">{$feifei.filename|ff_tpl_name}</td>
+    <td class="l ct">{$feifei.size|byte_format}</td>
+    <td class="l ct">{$feifei.mtime|ff_color_date='Y-m-d H:i:s',###}</td>
+    <if condition="preg_match('/\.html|\.htm|\.txt|\.css|\.php|\.js|\.tpl/',$feifei['filename'])">
+    <td class="l ct"><a href="?g=admin&m=tpl&a=add&id={$feifei.pathfile}">编辑</a> <a href="?g=admin&m=tpl&a=del&id={$feifei.pathfile}" onClick="return confirm('确定删除该文件吗?')">删除</a></td>
+    <else />
+    <td class="r ct"><a href="{$dirpath}/{$feifei.filename}" target="_blank">浏览</a> <a href="?g=admin&m=tpl&a=del&id={$feifei.pathfile}" onClick="return confirm('确定删除该文件吗?')">删除</a></td>
+    </if>
+  </tr>
+  </eq>  
+  </volist> 
+</tbody>       
+</table>
+<include file="./Public/system/footer.html" />
+</body>
+</html>

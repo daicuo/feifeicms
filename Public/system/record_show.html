@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>日志管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+<script charset="utf-8" src="__PUBLIC__/js/admin.js"></script>
+</head>
+<body class="body">
+<form action="?s=Admin-Admin-Delall" method="post" name="myform" id="myform"> 
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+<thead><tr><th class="r"><span style="float:left">日志筛选</span></th></tr></thead>
+  <tr>
+    <td class="tr">
+    <select name="sid" class="w100"><option value="99">所属频道</option><option value="1" <eq name="sid" value="1">selected</eq>>视频</option><option value="1" <eq name="sid" value="2">selected</eq>>文章</option><option value="3" <eq name="sid" value="3">selected</eq>>专题</option></select>&nbsp;
+    <select name="type" class="w100"><option value="99">日志类型</option><option value="1" <eq name="type" value="1">selected</eq>>点播记录</option><option value="2" <eq name="type" value="2">selected</eq>>收藏记录</option><option value="3" <eq name="type" value="3">selected</eq>>想看记录</option><option value="4" <eq name="type" value="4">selected</eq>>在看记录</option><option value="5" <eq name="type" value="5">selected</eq>>看过记录</option></select>&nbsp;
+    <input type="button" value="搜索" class="submit" onClick="post('?s=Admin-Record-Show');"></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table">
+  <thead>
+    <tr class="ct">
+      <th class="l"><span style="float:left;">ID <img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'id')))}" data-order="id" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></span>（用户名）邮箱</th>
+      <th class="l" width="80">所属频道</th>
+      <th class="l" width="100">内容ID</th>
+      <th class="l" width="100">日志类型</th>
+      <th class="l" width="120">日志时间<img class="sort" data-url="?{:http_build_query(array_merge($urls,array('order'=>'time')))}" data-order="time" data-sort="{$sort}" src="__PUBLIC__/images/admin/{$sort}.gif"></th>
+      <th class="r" width="80">相关操作</th>
+    </tr>
+  </thead>
+  <volist name="list" id="feifei">
+  <tbody>
+  <tr>
+    <td class="l pd">
+		<label class="fl ids_check"><input name='ids[]' type='checkbox' value='{$feifei.record_id}' class="noborder"></label>
+    <label class="fl ids_show">{$feifei.record_id}</label>
+		<label class="fl">（{$feifei.user_name|htmlspecialchars}）</label>
+		<label class="fl"><a href="?s=Admin-Record-Show-uid-{$feifei.record_uid}">{$feifei.user_email|htmlspecialchars}</a></label>
+		</td>
+    <td class="l ct"><a href="?s=Admin-Record-Show-sid-{$feifei.record_sid}"><switch name="feifei.record_sid"><case value="1">视频</case><case value="2">文章</case><case value="3">专题</case><case value="4">标签</case><case value="5">留言</case><case value="6">评论</case><default/>未知</switch></a></td>
+    <td class="l ct"><a href="?s=Admin-Record-Show-sid-{$feifei.record_sid}-did-{$feifei.record_did}">（{$feifei.record_did}）</a></td>
+    <td class="l ct"><a href="?s=Admin-Record-Show-type-{$feifei.record_type}"><switch name="feifei.record_type"><case value="1">点播记录</case><case value="2">收藏</case><case value="3">想看</case><case value="4">在看</case><case value="5">看过</case><default/>未知</switch></a></td>
+    <td class="l ct">{$feifei.record_time|date='Y-m-d H:i',###}</td>
+    <td class="r ct">
+    <a href="?s=Admin-Record-Del-ids-{$feifei.record_id}" onClick="return confirm('确定删除?')">删除</a>
+    </td>
+  </tr>
+  </tbody>
+  </volist>
+   <tr>
+      <td colspan="6" class="r pages">{$pages}</td>
+    </tr> 
+  <tfoot>
+    <tr>
+      <td colspan="6" class="r">
+      <input type="button" value="全选" class="submit" onClick="checkall('all');">
+      <input type="button" value="反选" class="submit" onClick="checkall();">
+      <input type="button" value="删除" class="submit" onClick="post('?s=Admin-Record-Del');">
+      </td>
+    </tr>  
+  </tfoot>
+</table>
+</form>
+<include file="./Public/system/footer.html" />
+<script type="text/javascript">
+$feifeicms.show.table();
+$feifeicms.show.sort("{$order}");
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>资源采集管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/css/admin-style.css' />
+<script charset="utf-8" src="__PUBLIC__/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body class="body">
+<div class="title">
+  <div class="left">资源库管理</div>
+</div>
+<div class="add">
+  <notempty name="jumpurl">
+  <h1><a href="{$jumpurl}" style="font-weight:bold">上次有采集任务没有完成，是否接着采集?</a></h1>
+  </notempty>
+  <h2><a href="?s=Admin-Cj-Show-type-1">视频资源库列表</a></h2>
+  <h2><a href="?s=Admin-Cj-Show-type-2">文章资源库列表</a></h2>
+  <h2><a href="?s=Admin-Cj-Show-type-4">用户资源库列表</a></h2>
+  <h2><a href="?s=Admin-Cj-Show-type-5">评论资源库</a></h2>
+  <h2><a href="?s=Admin-Cj-Show-type-6">剧情资源库</a></h2>
+</div>
+<include file="./Public/system/footer.html" />
+</body>
+</html>
