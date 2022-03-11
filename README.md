@@ -55,9 +55,8 @@
 3. 如果您的主机为 linux 操作系统，请设置如下文件夹权限为 777
     ./Runtime/* 系统缓存目录
     ./Uploads/* 系统附件保存目录
-4. 通过浏览器访问 http://您的域名/install.php,根据提示填写 mysql 配置信息
-5. 完成安装后会自动跳转到后台，默认用户名是admin 密码是admin888
-6. 后台路径为http://您的域名/admin.php(强列建议将admin.php改一个不容易猜到的名字)
+4. 通过浏览器访问（您的域名/install.php）、根据提示填写MYSQL配置信息
+5. 完成安装后会自动跳转到后台（您的域名/admin.php），默认用户名是admin 密码是admin888
 
 
 #### 联系我们
